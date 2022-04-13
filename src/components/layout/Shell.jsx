@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   AppShell,
   Navbar,
@@ -26,7 +27,7 @@ import Noun from '../pages/Noun';
 import About from '../pages/About';
 import NotFound from '../pages/NotFound';
 
-const Shell = () => {
+const Shell = ({ currentAccount, setCurrentAccount, walletLoading }) => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   return (
@@ -51,7 +52,11 @@ const Shell = () => {
           >
             <Stack justify='flex-start'>
               <MediaQuery largerThan='sm' styles={{ display: 'none' }}>
-                <ConnectBtn />
+                <ConnectBtn
+                  currentAccount={currentAccount}
+                  setCurrentAccount={setCurrentAccount}
+                  walletLoading={walletLoading}
+                />
               </MediaQuery>
               <Button
                 component={Link}
@@ -111,7 +116,12 @@ const Shell = () => {
               <Text>Florinoun</Text>
 
               <MediaQuery smallerThan='sm' styles={{ display: 'none' }}>
-                <ConnectBtn style={{ marginLeft: 'auto' }} />
+                <ConnectBtn
+                  currentAccount={currentAccount}
+                  setCurrentAccount={setCurrentAccount}
+                  walletLoading={walletLoading}
+                  style={{ marginLeft: 'auto' }}
+                />
               </MediaQuery>
             </div>
           </Header>
@@ -130,6 +140,12 @@ const Shell = () => {
       </AppShell>
     </Router>
   );
+};
+
+Shell.propTypes = {
+  currentAccount: PropTypes.string,
+  setCurrentAccount: PropTypes.func.isRequired,
+  walletLoading: PropTypes.bool.isRequired,
 };
 
 export default Shell;

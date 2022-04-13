@@ -1,4 +1,4 @@
-const CONTRACT_ADDRESS = '';
+const CONTRACT_ADDRESS = '0xcfD8Cf374857A6f01818cb08bf56190478A3C01f';
 
 const transformMetadata = (metadata) => {
   return {
