@@ -75,7 +75,7 @@ const Shell = () => {
                 leftIcon={<NounsIcon />}
                 variant='default'
               >
-                Home
+                Nouns
               </Button>
               <Button
                 component={Link}
@@ -83,7 +83,7 @@ const Shell = () => {
                 leftIcon={<AboutIcon />}
                 variant='default'
               >
-                Home
+                About
               </Button>
             </Stack>
           </Navbar>
