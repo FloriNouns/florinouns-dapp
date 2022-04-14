@@ -29,7 +29,7 @@ const Shell = () => {
         window.location.reload();
       });
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Router>
@@ -42,7 +42,7 @@ const Shell = () => {
                 : theme.colors.gray[0],
           },
         }}
-        navbarOffsetBreakpoint='md'
+        navbarOffsetBreakpoint='lg'
         fixed
         header={<Header theme={theme} opened={opened} setOpened={setOpened} />}
         navbar={<Navbar opened={opened} />}

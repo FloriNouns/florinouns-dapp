@@ -11,7 +11,7 @@ const Header = ({ theme, opened, setOpened }) => {
   return (
     <MantineHeader height={70} p='md'>
       <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-        <MediaQuery largerThan='md' styles={{ display: 'none' }}>
+        <MediaQuery largerThan='lg' styles={{ display: 'none' }}>
           <Burger
             opened={opened}
             onClick={() => setOpened((o) => !o)}

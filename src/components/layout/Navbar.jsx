@@ -17,7 +17,7 @@ const Navbar = ({ opened }) => {
   return (
     <MantineNavbar
       p='md'
-      hiddenBreakpoint='md'
+      hiddenBreakpoint='lg'
       hidden={!opened}
       width={{ sm: 300 }}
     >
