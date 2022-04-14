@@ -1,35 +1,36 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import {
-  AppShell,
-  Navbar,
-  Header,
-  Footer,
-  Stack,
-  Text,
-  Button,
-  MediaQuery,
-  Burger,
-  useMantineTheme,
-} from '@mantine/core';
-import {
-  Home as HomeIcon,
-  Diamond as MintIcon,
-  LayoutGrid as NounsIcon,
-  InfoSquare as AboutIcon,
-} from 'tabler-icons-react';
-import ConnectBtn from '../layout/ConnectBtn';
+import React, { useState, useContext, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppShell, useMantineTheme } from '@mantine/core';
+import GenContext from '../../context/GenContext';
+import Header from './Header';
+import Navbar from './Navbar';
+import Footer from './Footer';
 import Home from '../pages/Home';
 import Mint from '../pages/Mint';
 import Nouns from '../pages/Nouns';
 import Noun from '../pages/Noun';
-import About from '../pages/About';
+import Disclaimer from '../pages/Disclaimer';
 import NotFound from '../pages/NotFound';
 
-const Shell = ({ currentAccount, setCurrentAccount, walletLoading }) => {
+const Shell = () => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const { checkWallet, checkNetwork } = useContext(GenContext);
+
+  useEffect(() => {
+    checkWallet();
+
+    if (window.ethereum) {
+      checkNetwork();
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload();
+      });
+      window.ethereum.on('accountsChanged', () => {
+        window.location.reload();
+      });
+    }
+  }, []);
+
   return (
     <Router>
       <AppShell
@@ -43,109 +44,24 @@ const Shell = ({ currentAccount, setCurrentAccount, walletLoading }) => {
         }}
         navbarOffsetBreakpoint='md'
         fixed
-        navbar={
-          <Navbar
-            p='md'
-            hiddenBreakpoint='md'
-            hidden={!opened}
-            width={{ sm: 300 }}
-          >
-            <Stack justify='flex-start'>
-              <MediaQuery largerThan='sm' styles={{ display: 'none' }}>
-                <ConnectBtn
-                  currentAccount={currentAccount}
-                  setCurrentAccount={setCurrentAccount}
-                  walletLoading={walletLoading}
-                />
-              </MediaQuery>
-              <Button
-                component={Link}
-                to='/'
-                leftIcon={<HomeIcon />}
-                variant='default'
-              >
-                Home
-              </Button>
-              <Button
-                component={Link}
-                to='/mint'
-                leftIcon={<MintIcon />}
-                variant='default'
-              >
-                Mint
-              </Button>
-              <Button
-                component={Link}
-                to='/nouns'
-                leftIcon={<NounsIcon />}
-                variant='default'
-              >
-                Nouns
-              </Button>
-              <Button
-                component={Link}
-                to='/about'
-                leftIcon={<AboutIcon />}
-                variant='default'
-              >
-                About
-              </Button>
-            </Stack>
-          </Navbar>
-        }
-        footer={
-          <Footer height={60} p='md'>
-            Application footer
-          </Footer>
-        }
-        header={
-          <Header height={70} p='md'>
-            <div
-              style={{ display: 'flex', alignItems: 'center', height: '100%' }}
-            >
-              <MediaQuery largerThan='md' styles={{ display: 'none' }}>
-                <Burger
-                  opened={opened}
-                  onClick={() => setOpened((o) => !o)}
-                  size='sm'
-                  color={theme.colors.gray[6]}
-                  mr='xl'
-                />
-              </MediaQuery>
-
-              <Text>Florinoun</Text>
-
-              <MediaQuery smallerThan='sm' styles={{ display: 'none' }}>
-                <ConnectBtn
-                  currentAccount={currentAccount}
-                  setCurrentAccount={setCurrentAccount}
-                  walletLoading={walletLoading}
-                  style={{ marginLeft: 'auto' }}
-                />
-              </MediaQuery>
-            </div>
-          </Header>
-        }
+        header={<Header theme={theme} opened={opened} setOpened={setOpened} />}
+        navbar={<Navbar opened={opened} />}
+        footer={<Footer />}
       >
         <main>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/mint' element={<Mint />} />
-            <Route path='/nouns' element={<Nouns />} />
-            <Route path='/noun/:id' element={<Noun />} />
-            <Route path='/about' element={<About />} />
+            <Route path='/nouns/:page' element={<Nouns />} />
+            <Route path='/noun/:tokenId' element={<Noun />} />
+            <Route path='/disclaimer' element={<Disclaimer />} />
+            <Route path='/404' element={<NotFound />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </main>
       </AppShell>
     </Router>
   );
-};
-
-Shell.propTypes = {
-  currentAccount: PropTypes.string,
-  setCurrentAccount: PropTypes.func.isRequired,
-  walletLoading: PropTypes.bool.isRequired,
 };
 
 export default Shell;

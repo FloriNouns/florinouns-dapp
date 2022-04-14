@@ -1,3 +1,4 @@
+/* Disclaimer (optional) */
 import React from 'react';
 
 const Disclaimer = () => {

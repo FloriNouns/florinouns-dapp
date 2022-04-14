@@ -1,55 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Box } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
+import GenContext from '../../context/GenContext';
 
-const ConnectBtn = ({
-  currentAccount,
-  setCurrentAccount,
-  walletLoading,
-  style,
-  className,
-}) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { ethereum } = window;
-
-  // MetaMask popup to connect wallet
-  const connectWallet = async () => {
-    setIsLoading(true);
-
-    if (!ethereum) {
-      showNotification({
-        title: 'You need MetaMask to connect your wallet.',
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const accounts = await ethereum.request({
-        method: 'eth_requestAccounts',
-      });
-      const account = accounts[0];
-      setCurrentAccount(account);
-    } catch (e) {
-      if (e.code === 4001) {
-        showNotification({
-          title: 'Please connect to MetaMask.',
-        });
-      } else console.error(e);
-    }
-
-    setIsLoading(false);
-  };
+const ConnectBtn = ({ style, className }) => {
+  const { currentAccount, loading, connectWallet } = useContext(GenContext);
 
   const renderContent = () => {
-    if (isLoading || walletLoading) {
-      return (
-        <Button fullWidth='true' loading>
-          Connect Wallet
-        </Button>
-      );
-    } else if (currentAccount) {
+    if (currentAccount) {
       return (
         <Box
           sx={(theme) => ({
@@ -65,7 +23,7 @@ const ConnectBtn = ({
       );
     } else {
       return (
-        <Button onClick={connectWallet} fullWidth='true'>
+        <Button onClick={connectWallet} fullWidth='true' disabled={loading}>
           Connect Wallet
         </Button>
       );
@@ -80,9 +38,6 @@ const ConnectBtn = ({
 };
 
 ConnectBtn.propTypes = {
-  currentAccount: PropTypes.string,
-  setCurrentAccount: PropTypes.func.isRequired,
-  walletLoading: PropTypes.bool.isRequired,
   style: PropTypes.object,
   className: PropTypes.string,
 };
