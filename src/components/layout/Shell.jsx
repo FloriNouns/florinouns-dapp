@@ -17,9 +17,11 @@ const Shell = () => {
   const [opened, setOpened] = useState(false);
   const { currentAccount, checkWallet, checkNetwork } = useContext(GenContext);
 
+  // On mount, check for connected account
   useEffect(() => {
     checkWallet();
 
+    // if provider exists, add event to reload on account/chain change
     if (window.ethereum) {
       window.ethereum.on('chainChanged', () => {
         window.location.reload();
@@ -30,6 +32,7 @@ const Shell = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // when value of currentAccount changes, check the network
   useEffect(() => {
     if (currentAccount) checkNetwork();
   }, [currentAccount]); // eslint-disable-line react-hooks/exhaustive-deps

@@ -5,18 +5,22 @@
  * 		- NounView
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NounView from '../noun/NounView';
 
 const Noun = () => {
-  // Get tokenId from path params
-  let { tokenId } = useParams();
+  // Object for redirects
   const navigate = useNavigate();
-  // If not a number, go to 404 page
-  if (isNaN(Number(tokenId))) navigate('/404');
-  // else convert to number
-  else tokenId = Number(tokenId);
+  // Get tokenId from path params and convert to number
+  let { tokenId } = useParams();
+  tokenId = Number(tokenId);
+
+  // on tokenId change, redirect if out of bounds
+  useEffect(() => {
+    // TODO add condition if tokenId > supply
+    if (isNaN(tokenId) || tokenId < 1) navigate('/404');
+  }, [tokenId, navigate]);
 
   return (
     <div>

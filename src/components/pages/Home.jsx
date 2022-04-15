@@ -9,7 +9,7 @@
  * 	Other components to include:
  * 		- FAQ at the bottom
  *
- * Using currentAccount and connectWallet:
+ * Using currentAccount and connectWallet...
  *   import React, { useContext } from 'react';
  *   import GenContext from '../../context/GenContext';
  *   const { currentAccount, connectWallet } = useContext(GenContext);
