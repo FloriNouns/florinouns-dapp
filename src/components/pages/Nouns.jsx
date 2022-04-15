@@ -34,6 +34,7 @@ const Nouns = () => {
   useEffect(() => {
     setStart(page * 20 - 19);
     setEnd(page * 20 <= supply ? page * 20 : supply);
+    window.scrollTo(0, 0);
     if (isNaN(page) || page < 1 || (supply && start > supply)) navigate('/404');
   }, [start, page, supply, navigate]);
 
