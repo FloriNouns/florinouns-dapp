@@ -40,7 +40,9 @@ const Nouns = () => {
     ) {
       provider = window.ethereum;
     } else {
-      provider = process.env.REACT_APP_JSONRPC;
+      if (process.env.REACT_APP_CHAIN_ID === 1)
+        provider = process.env.REACT_APP_MAINNET_JSONRPC;
+      else provider = process.env.REACT_APP_RINKEBY_JSONRPC;
     }
 
     const web3 = new Web3(provider);
