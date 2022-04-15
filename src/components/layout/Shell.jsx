@@ -15,13 +15,12 @@ import NotFound from '../pages/NotFound';
 const Shell = () => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const { checkWallet, checkNetwork } = useContext(GenContext);
+  const { currentAccount, checkWallet, checkNetwork } = useContext(GenContext);
 
   useEffect(() => {
     checkWallet();
 
     if (window.ethereum) {
-      checkNetwork();
       window.ethereum.on('chainChanged', () => {
         window.location.reload();
       });
@@ -30,6 +29,10 @@ const Shell = () => {
       });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (currentAccount) checkNetwork();
+  }, [currentAccount]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Router>
