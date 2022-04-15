@@ -34,18 +34,13 @@ const Nouns = () => {
 
   useEffect(() => {
     let provider;
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-      if (currentAccount && window.ethereum.networkVersion === '4') {
-        provider = window.ethereum;
-      } else {
-        provider = process.env.REACT_APP_RINKEBY_JSONRPC;
-      }
+    if (
+      currentAccount &&
+      window.ethereum.networkVersion === process.env.REACT_APP_CHAIN_ID
+    ) {
+      provider = window.ethereum;
     } else {
-      if (currentAccount && window.ethereum.networkVersion === '1') {
-        provider = window.ethereum;
-      } else {
-        provider = process.env.REACT_APP_MAINNET_JSONRPC;
-      }
+      provider = process.env.REACT_APP_JSONRPC;
     }
 
     const web3 = new Web3(provider);

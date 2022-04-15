@@ -75,20 +75,13 @@ export const GenProvider = ({ children }) => {
     if (!window.ethereum) return;
 
     try {
-      if (
-        (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') &&
-        window.ethereum.networkVersion !== '4'
-      ) {
+      if (window.ethereum.networkVersion !== process.env.REACT_APP_CHAIN_ID) {
         showNotification({
-          title: "Make sure you're on Rinkeby Testnet!",
-          color: 'orange',
-        });
-      } else if (
-        process.env.NODE_ENV === 'production' &&
-        window.ethereum.networkVersion !== '1'
-      ) {
-        showNotification({
-          title: "Make sure you're on Ethereum Mainnet!",
+          title: `Make sure you're on ${
+            process.env.REACT_APP_CHAIN_ID === 1
+              ? 'Ethereum Mainnet'
+              : 'Rinkeby Testnet'
+          }!`,
           color: 'orange',
         });
       }
