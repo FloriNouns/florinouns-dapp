@@ -7,9 +7,11 @@ const Spinner = () => {
 
   return (
     <LoadingOverlay
+      transitionDuration={200}
       visible={loading}
       loaderProps={{ size: 'xl' }}
       overlayColor='#000000'
+      overlayOpacity={0.7}
     />
   );
 };
