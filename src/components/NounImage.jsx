@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Skeleton, Image, Badge, Text, Box, Grid } from '@mantine/core';
+import { Link, useLocation } from 'react-router-dom';
+import { Skeleton, Image, Badge, Text, Grid } from '@mantine/core';
 import PropTypes from 'prop-types';
 
 const NounImage = ({ tokenId, base }) => {
   const [show, setShow] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     setTimeout(() => {
@@ -24,17 +25,19 @@ const NounImage = ({ tokenId, base }) => {
               : `${process.env.PUBLIC_URL}/images/placeholder.png`
           }
         />
-        <Badge
-          style={{ position: 'fixed', bottom: '0' }}
-          radius='xs'
-          fullWidth
-          variant='gradient'
-          gradient={{ from: 'indigo', to: 'green', deg: 135 }}
-        >
-          <Text weight={400} transform='capitalize' size='sm'>
-            Florinoun #{tokenId}
-          </Text>
-        </Badge>
+        {location.pathname.includes('/nouns/') && (
+          <Badge
+            style={{ position: 'fixed', bottom: '0' }}
+            radius='xs'
+            fullWidth
+            variant='gradient'
+            gradient={{ from: 'indigo', to: 'green', deg: 135 }}
+          >
+            <Text weight={400} transform='capitalize' size='sm'>
+              Florinoun #{tokenId}
+            </Text>
+          </Badge>
+        )}
       </Skeleton>
     </Grid.Col>
   );

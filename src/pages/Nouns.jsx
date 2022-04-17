@@ -21,7 +21,7 @@ const Nouns = () => {
   const [isOutside, setIsOutside] = useState(false);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(0);
-  // Custom hook for contract
+  // get supply and base from contract using custom hook
   const { supply, base, getConfig } = useContract();
 
   // On mount, get config from contract
@@ -29,14 +29,14 @@ const Nouns = () => {
     getConfig();
   }, [getConfig]);
 
-  // When page or supply changes, set start and end then check bounds
+  // When page changes, set start and end
   useEffect(() => {
     window.scrollTo(0, 0);
     setStart(() => Number(page) * 20 - 19);
     setEnd(() => Number(page) * 20);
   }, [page]);
 
-  // When page or supply changes, set start and end then check bounds
+  // When page or supply changes, check bounds
   useEffect(() => {
     if (supply && (isNaN(Number(page)) || Number(page) < 1 || start > supply))
       setIsOutside(() => true);
@@ -58,7 +58,7 @@ const Nouns = () => {
     return images;
   };
 
-  // renders images for selected page
+  // renders if page is out of bounds
   const renderOutOfBounds = () => {
     return (
       <Paper shadow='sm' p='lg'>

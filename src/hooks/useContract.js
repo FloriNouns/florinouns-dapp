@@ -16,7 +16,10 @@ const useContract = () => {
       let provider;
 
       // If user is on correct chain, set MetaMask as provider
-      if (window.ethereum.networkVersion === process.env.REACT_APP_CHAIN_ID) {
+      if (
+        window.ethereum &&
+        window.ethereum.networkVersion === process.env.REACT_APP_CHAIN_ID
+      ) {
         provider = window.ethereum;
       } else {
         // else if contract on mainnet, use infura mainnet
