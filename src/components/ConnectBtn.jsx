@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Box } from '@mantine/core';
-import GenContext from '../../context/GenContext';
+import Web3Context from '../context/Web3Context';
 
 // style and classes passed in as props
-const ConnectBtn = ({ style, className }) => {
+const ConnectBtn = ({ style }) => {
   // Get context
-  const { currentAccount, loading, connectWallet } = useContext(GenContext);
+  const { currentAccount, connectWallet, loading } = useContext(Web3Context);
 
   // Conditional rendering
   const renderContent = () => {
@@ -22,7 +22,11 @@ const ConnectBtn = ({ style, className }) => {
             borderRadius: theme.radius.sm,
           })}
         >
-          Connected: {currentAccount}
+          Connected: {currentAccount.substring(0, 6)}...
+          {currentAccount.substring(
+            currentAccount.length - 4,
+            currentAccount.length
+          )}
         </Box>
       );
       // else return button to connect wallet
@@ -35,16 +39,11 @@ const ConnectBtn = ({ style, className }) => {
     }
   };
 
-  return (
-    <div style={style} className={className}>
-      {renderContent()}
-    </div>
-  );
+  return <div style={style}>{renderContent()}</div>;
 };
 
 ConnectBtn.propTypes = {
   style: PropTypes.object,
-  className: PropTypes.string,
 };
 
 export default ConnectBtn;

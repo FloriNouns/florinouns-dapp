@@ -1,20 +1,23 @@
 import React from 'react';
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
-import Shell from './components/layout/Shell';
-import Spinner from './components/layout/Spinner';
-import { GenProvider } from './context/GenContext';
+import Shell from './components/Shell';
+import Spinner from './components/Spinner';
+import { AppContextProvider } from './context/AppContext';
+import { Web3ContextProvider } from './context/Web3Context';
 
 function App() {
   return (
-    <GenProvider>
-      <MantineProvider>
-        <NotificationsProvider>
-          <Shell />
-          <Spinner />
-        </NotificationsProvider>
-      </MantineProvider>
-    </GenProvider>
+    <AppContextProvider>
+      <Web3ContextProvider>
+        <MantineProvider>
+          <NotificationsProvider>
+            <Shell />
+            <Spinner />
+          </NotificationsProvider>
+        </MantineProvider>
+      </Web3ContextProvider>
+    </AppContextProvider>
   );
 }
 

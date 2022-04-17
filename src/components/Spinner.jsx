@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { LoadingOverlay } from '@mantine/core';
-import GenContext from '../../context/GenContext';
+import Web3Context from '../context/Web3Context';
 
 const Spinner = () => {
-  const { loading } = useContext(GenContext);
+  const { loading } = useContext(Web3Context);
 
   return (
     <LoadingOverlay

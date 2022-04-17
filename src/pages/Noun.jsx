@@ -1,13 +1,18 @@
 /* Noun Page
  *	Functionality:
- *		Pass tokenId as prop to NounView
+ *		Get token from path params
+ *    Check contract for token existence
+ *		If token doesn't exist, redirect to NotFound page
+ *		Pass tokenId as prop to NounImage
+ *    Pass metadata to NounMenu
  * 	Other components to include:
- * 		- NounView
+ * 		- NounImage
+ *    - NounMenu
  */
 
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import NounView from '../noun/NounView';
+import NounView from '../components/NounImage';
 
 const Noun = () => {
   // Object for redirects
