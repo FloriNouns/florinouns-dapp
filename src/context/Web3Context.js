@@ -19,6 +19,7 @@ export const Web3ContextProvider = ({ children }) => {
     const checkWallet = async () => {
       if (!window.ethereum) return;
 
+      // Set window.ethereum events
       window.ethereum.on('chainChanged', () => {
         window.location.reload();
       });
@@ -38,6 +39,7 @@ export const Web3ContextProvider = ({ children }) => {
       } catch (e) {
         if (e.code === 4001) {
           showNotification({
+            id: 'connect-to-metamask',
             title: 'Please connect to MetaMask.',
           });
         } else console.error(e);
@@ -47,33 +49,35 @@ export const Web3ContextProvider = ({ children }) => {
     checkWallet();
   }, []);
 
+  // check network matches contract chain id
+  const checkNetwork = useCallback(async () => {
+    try {
+      if (window.ethereum.networkVersion !== process.env.REACT_APP_CHAIN_ID) {
+        showNotification({
+          id: 'check-network',
+          title: `Make sure you're on ${
+            process.env.REACT_APP_CHAIN_ID === '1'
+              ? 'Ethereum Mainnet'
+              : 'Rinkeby Testnet'
+          }!`,
+          color: 'orange',
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
   // run when current account changes
   useEffect(() => {
-    // If account exists, check network
-    const checkNetwork = async () => {
-      try {
-        if (window.ethereum.networkVersion !== process.env.REACT_APP_CHAIN_ID) {
-          showNotification({
-            title: `Make sure you're on ${
-              process.env.REACT_APP_CHAIN_ID === '1'
-                ? 'Ethereum Mainnet'
-                : 'Rinkeby Testnet'
-            }!`,
-            color: 'orange',
-          });
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
     if (currentAccount) checkNetwork();
-  }, [currentAccount]);
+  }, [currentAccount, checkNetwork]);
 
   // MetaMask popup to connect wallet
   const connectWallet = useCallback(async () => {
     if (!window.ethereum) {
       showNotification({
+        id: 'install-metamask',
         title: 'You need MetaMask to connect your wallet.',
       });
       return;
@@ -92,6 +96,7 @@ export const Web3ContextProvider = ({ children }) => {
     } catch (e) {
       if (e.code === 4001) {
         showNotification({
+          id: 'connect-to-metamask',
           title: 'Please connect to MetaMask.',
         });
       } else {
@@ -104,12 +109,13 @@ export const Web3ContextProvider = ({ children }) => {
 
   const value = useMemo(
     () => ({
+      checkNetwork,
       currentAccount,
       connectWallet,
       loading,
       setLoading,
     }),
-    [currentAccount, connectWallet, loading, setLoading]
+    [checkNetwork, currentAccount, connectWallet, loading, setLoading]
   );
 
   return <Web3Context.Provider value={value}>{children}</Web3Context.Provider>;

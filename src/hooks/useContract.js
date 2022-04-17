@@ -50,11 +50,20 @@ const useContract = () => {
       const config = await contract.methods.config().call();
       // set supply and base from config
       setSupply(() => config.supply);
-      setBase(() => config.base);
+      setBase(() => {
+        if (config.base === '') {
+          showNotification({
+            id: 'placeholder-notification',
+            title: 'The art will be revealed soon!',
+          });
+        }
+        return config.base;
+      });
     } catch (e) {
       // if there's an error, alert user
       console.error(e);
       showNotification({
+        id: 'connection-failed',
         title: 'Something went wrong...',
         message: "We couldn't connect to the contract :(",
         color: 'red',

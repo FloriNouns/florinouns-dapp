@@ -10,7 +10,7 @@ function App() {
   return (
     <AppContextProvider>
       <Web3ContextProvider>
-        <MantineProvider>
+        <MantineProvider theme={{ primaryColor: 'indigo' }}>
           <NotificationsProvider>
             <Shell />
             <Spinner />

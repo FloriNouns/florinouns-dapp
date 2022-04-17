@@ -26,17 +26,14 @@ const Shell = () => {
         navbar={<Navbar />}
         footer={<Footer />}
       >
-        <main>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/mint' element={<Mint />} />
-            <Route path='/nouns/:page' element={<Nouns />} />
-            <Route path='/noun/:tokenId' element={<Noun />} />
-            <Route path='/disclaimer' element={<Disclaimer />} />
-            <Route path='/404' element={<NotFound />} />
-            <Route path='*' element={<NotFound />} />
-          </Routes>
-        </main>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/mint' element={<Mint />} />
+          <Route path='/nouns/:page' element={<Nouns />} />
+          <Route path='/noun/:tokenId' element={<Noun />} />
+          <Route path='/disclaimer' element={<Disclaimer />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
       </AppShell>
     </Router>
   );

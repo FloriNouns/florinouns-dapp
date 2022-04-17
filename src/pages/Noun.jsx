@@ -12,7 +12,6 @@
 
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import NounView from '../components/NounImage';
 
 const Noun = () => {
   // Object for redirects
@@ -29,7 +28,9 @@ const Noun = () => {
 
   return (
     <div>
-      <NounView tokenId={tokenId} />
+      Viewing Noun {tokenId}
+      {/* <NounImage tokenId={tokenId} base={base}/> */}
+      {/* <NounMenu/> */}
     </div>
   );
 };

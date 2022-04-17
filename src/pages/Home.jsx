@@ -21,9 +21,10 @@
  */
 
 import React from 'react';
+import { Paper } from '@mantine/core';
 
 const Home = () => {
-  return <div>Viewing Home Page</div>;
+  return <Paper>Viewing Home Page</Paper>;
 };
 
 export default Home;

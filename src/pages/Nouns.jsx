@@ -18,9 +18,9 @@ const Nouns = () => {
   // Get page from path params and convert to number
   const { page } = useParams();
   // Create local state
-  const [isOutside, setIsOutside] = useState(false);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(0);
+  const [isOutside, setIsOutside] = useState(false);
   // get supply and base from contract using custom hook
   const { supply, base, getConfig } = useContract();
 
@@ -43,7 +43,7 @@ const Nouns = () => {
     else setIsOutside(() => false);
   }, [start, page, supply]);
 
-  // renders images for selected page
+  // Render images for selected page
   const renderImages = () => {
     if (!base) return;
 
