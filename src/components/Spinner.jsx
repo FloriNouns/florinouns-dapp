@@ -7,6 +7,7 @@ const Spinner = () => {
 
   return (
     <LoadingOverlay
+      style={{ zIndex: '403' }}
       transitionDuration={200}
       visible={loading}
       loaderProps={{ size: 'xl' }}

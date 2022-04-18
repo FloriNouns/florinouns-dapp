@@ -11,7 +11,7 @@ const Header = ({ theme }) => {
   const isDesktop = useIsDesktop();
 
   return (
-    <MantineHeader height={70} p='sm'>
+    <MantineHeader style={{ zIndex: '402' }} height={70} p='sm'>
       <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
         <MediaQuery largerThan='lg' styles={{ display: 'none' }}>
           <Burger

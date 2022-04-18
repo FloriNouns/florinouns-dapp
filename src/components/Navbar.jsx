@@ -23,6 +23,7 @@ const Navbar = () => {
 
   return (
     <MantineNavbar
+      style={{ zIndex: '402' }}
       p='md'
       hiddenBreakpoint='lg'
       hidden={!navbarVisible}

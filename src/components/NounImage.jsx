@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Skeleton, Image, LoadingOverlay, Text, Grid } from '@mantine/core';
+import {
+  Skeleton,
+  Image,
+  LoadingOverlay as Caption,
+  Text,
+  Grid,
+} from '@mantine/core';
 import { useHover } from '@mantine/hooks';
 import PropTypes from 'prop-types';
 import useIsDesktop from '../hooks/useIsDesktop';
@@ -28,7 +34,7 @@ const NounImage = ({ tokenId, base }) => {
           {location.pathname.includes('/nouns/') && (
             <>
               {!isDesktop && (
-                <LoadingOverlay
+                <Caption
                   style={{ height: '15%', marginTop: 'auto' }}
                   loader={
                     <Text color='white' weight={400} size={'lg'}>
@@ -41,7 +47,7 @@ const NounImage = ({ tokenId, base }) => {
                 />
               )}
               {isDesktop && (
-                <LoadingOverlay
+                <Caption
                   loader={
                     <Text color='white' weight={400} size={'xl'}>
                       Florinoun #{tokenId}
