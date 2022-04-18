@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const useIsDesktop = () => {
-  const [isDesktop, setIsDesktop] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 768);
 
   const checkWidth = () => {
     setIsDesktop(window.innerWidth > 768);

@@ -1,43 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Skeleton, Image, Badge, Text, Grid } from '@mantine/core';
+import { Skeleton, Image, LoadingOverlay, Text, Grid } from '@mantine/core';
+import { useHover } from '@mantine/hooks';
 import PropTypes from 'prop-types';
+import useIsDesktop from '../hooks/useIsDesktop';
 
 const NounImage = ({ tokenId, base }) => {
-  const [show, setShow] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const location = useLocation();
+  const { hovered, ref } = useHover();
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     setTimeout(() => {
-      setShow(() => true);
+      setShowSkeleton(() => false);
     }, 200);
   }, []);
 
   return (
     <Grid.Col span={6} md={3}>
-      <Skeleton visible={!show} style={{ aspectRatio: 1, contain: 'content' }}>
-        <Image
-          component={Link}
-          to={`/noun/${tokenId}`}
-          src={
-            base !== ''
-              ? `${process.env.PUBLIC_URL}/images/${tokenId}.png`
-              : `${process.env.PUBLIC_URL}/images/placeholder.png`
-          }
-        />
-        {location.pathname.includes('/nouns/') && (
-          <Badge
-            style={{ position: 'fixed', bottom: '0' }}
-            radius='xs'
-            fullWidth
-            variant='gradient'
-            gradient={{ from: 'indigo', to: 'green', deg: 135 }}
-          >
-            <Text weight={400} transform='capitalize' size='sm'>
-              Florinoun #{tokenId}
-            </Text>
-          </Badge>
-        )}
+      <Skeleton
+        ref={ref}
+        visible={showSkeleton}
+        style={{ aspectRatio: 1, contain: 'content' }}
+      >
+        <Link to={`/noun/${tokenId}`}>
+          {location.pathname.includes('/nouns/') && (
+            <>
+              {!isDesktop && (
+                <LoadingOverlay
+                  style={{ height: '15%', marginTop: 'auto' }}
+                  loader={
+                    <Text color='white' weight={400} size={'lg'}>
+                      Florinoun #{tokenId}
+                    </Text>
+                  }
+                  overlayOpacity={0.7}
+                  overlayColor='#000'
+                  visible={true}
+                />
+              )}
+              {isDesktop && (
+                <LoadingOverlay
+                  loader={
+                    <Text color='white' weight={400} size={'xl'}>
+                      Florinoun #{tokenId}
+                    </Text>
+                  }
+                  overlayOpacity={0.7}
+                  overlayColor='#000'
+                  visible={hovered}
+                />
+              )}
+            </>
+          )}
+          <Image
+            src={
+              base !== ''
+                ? `${process.env.PUBLIC_URL}/images/${tokenId}.png`
+                : `${process.env.PUBLIC_URL}/images/placeholder.png`
+            }
+          />
+        </Link>
       </Skeleton>
     </Grid.Col>
   );

@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppShell, useMantineTheme } from '@mantine/core';
 import Header from './Header';
 import Navbar from './Navbar';
-import Footer from './Footer';
 import { Home, Mint, Nouns, Noun, Disclaimer, NotFound } from '../pages';
 
 const Shell = () => {
@@ -24,7 +23,6 @@ const Shell = () => {
         fixed
         header={<Header theme={theme} />}
         navbar={<Navbar />}
-        footer={<Footer />}
       >
         <Routes>
           <Route path='/' element={<Home />} />

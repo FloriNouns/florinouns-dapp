@@ -1,6 +1,13 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar as MantineNavbar, Stack, Button } from '@mantine/core';
+import {
+  Navbar as MantineNavbar,
+  Stack,
+  Button,
+  Divider,
+  Anchor,
+  Group,
+} from '@mantine/core';
 import {
   Home as HomeIcon,
   Diamond as MintIcon,
@@ -51,6 +58,16 @@ const Navbar = () => {
           Nouns
         </Button>
       </Stack>
+      <Divider mt='xl' mb='xs' label='2022 Florinoun' labelPosition='center' />
+      <Group position='center'>
+        <Anchor href='https://www.fgcu.edu/' target='_blank'>
+          FGCU
+        </Anchor>
+
+        <Anchor color='indigo' component={Link} to='/disclaimer'>
+          Disclaimer
+        </Anchor>
+      </Group>
     </MantineNavbar>
   );
 };
