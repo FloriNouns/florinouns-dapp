@@ -41,7 +41,7 @@ This project is affiliated with [FGCU](https://www.fgcu.edu/) and will allow use
 
     - Enter the address of your Factoria F0 contract. Use address seen below if using our testing contract.
 
-          CONTRACT_ADDRESS='0x1C559F9c21f897E8e5E6C957270667af60Ed5703'
+          CONTRACT_ADDRESS='0xaCd530bDc049E269dcd743D6E849092c983E7799'
 
     - The application will try to use MetaMask as your provider, so RPC endpoints are optional.
 

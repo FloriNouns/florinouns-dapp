@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
   Skeleton,
   Image,
@@ -24,50 +24,53 @@ const NounImage = ({ tokenId, base }) => {
   }, []);
 
   return (
-    <Grid.Col span={6} md={3}>
+    <Grid.Col
+      span={location.pathname.includes('/nouns/') ? 6 : 12}
+      md={location.pathname.includes('/nouns/') ? 3 : 6}
+    >
       <Skeleton
         ref={ref}
         visible={showSkeleton}
         style={{ aspectRatio: 1, contain: 'content' }}
       >
-        <Link to={`/noun/${tokenId}`}>
-          {location.pathname.includes('/nouns/') && (
-            <>
-              {!isDesktop && (
-                <Caption
-                  style={{ height: '15%', marginTop: 'auto' }}
-                  loader={
-                    <Text color='white' weight={400} size={'lg'}>
-                      Florinoun #{tokenId}
-                    </Text>
-                  }
-                  overlayOpacity={0.7}
-                  overlayColor='#000'
-                  visible={true}
-                />
-              )}
-              {isDesktop && (
-                <Caption
-                  loader={
-                    <Text color='white' weight={400} size={'xl'}>
-                      Florinoun #{tokenId}
-                    </Text>
-                  }
-                  overlayOpacity={0.7}
-                  overlayColor='#000'
-                  visible={hovered}
-                />
-              )}
-            </>
-          )}
-          <Image
-            src={
-              base !== ''
-                ? `${process.env.PUBLIC_URL}/images/${tokenId}.png`
-                : `${process.env.PUBLIC_URL}/images/placeholder.png`
-            }
-          />
-        </Link>
+        {location.pathname.includes('/nouns/') && (
+          <>
+            {/* <Link to={`/noun/${tokenId}`}> */}
+            {!isDesktop && (
+              <Caption
+                style={{ height: '15%', marginTop: 'auto' }}
+                loader={
+                  <Text color='white' weight={400} size={'lg'}>
+                    Florinoun #{tokenId}
+                  </Text>
+                }
+                overlayOpacity={0.7}
+                overlayColor='#000'
+                visible={true}
+              />
+            )}
+            {isDesktop && (
+              <Caption
+                loader={
+                  <Text color='white' weight={400} size={'xl'}>
+                    Florinoun #{tokenId}
+                  </Text>
+                }
+                overlayOpacity={0.7}
+                overlayColor='#000'
+                visible={hovered}
+              />
+            )}
+            {/* </Link> */}
+          </>
+        )}
+        <Image
+          src={
+            base !== ''
+              ? `https://storage.googleapis.com/fln-collection/${tokenId}.png`
+              : `https://storage.googleapis.com/fln-collection/placeholder.png`
+          }
+        />
       </Skeleton>
     </Grid.Col>
   );

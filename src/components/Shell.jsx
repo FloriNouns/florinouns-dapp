@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AppShell, useMantineTheme } from '@mantine/core';
+import { AppShell, LoadingOverlay, useMantineTheme } from '@mantine/core';
 import Header from './Header';
 import Navbar from './Navbar';
-import { Home, Mint, Nouns, Noun, Disclaimer, NotFound } from '../pages';
 
 const Shell = () => {
+  // const Home = lazy(() => import('../pages/Home'));
+  const Mint = lazy(() => import('../pages/Mint'));
+  const Nouns = lazy(() => import('../pages/Nouns'));
+  // const Noun = lazy(() => import('../pages/Noun'));
+  const NotFound = lazy(() => import('../pages/NotFound'));
   const theme = useMantineTheme();
 
   return (
@@ -24,14 +28,27 @@ const Shell = () => {
         header={<Header theme={theme} />}
         navbar={<Navbar />}
       >
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/mint' element={<Mint />} />
-          <Route path='/nouns/:page' element={<Nouns />} />
-          <Route path='/noun/:tokenId' element={<Noun />} />
-          <Route path='/disclaimer' element={<Disclaimer />} />
-          <Route path='*' element={<NotFound />} />
-        </Routes>
+        <Suspense
+          fallback={
+            <LoadingOverlay
+              visible
+              zIndex={999}
+              transitionDuration={200}
+              loaderProps={{ size: 'xl' }}
+              overlayColor='#000000'
+              overlayOpacity={0.7}
+            />
+          }
+        >
+          <Routes>
+            {/* <Route path='/' element={<Home />} /> */}
+            {/* <Route path='/mint' element={<Mint />} /> */}
+            <Route path='/' element={<Mint />} />
+            <Route path='/nouns/:page' element={<Nouns />} />
+            {/* <Route path='/noun/:tokenId' element={<Noun />} /> */}
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </AppShell>
     </Router>
   );

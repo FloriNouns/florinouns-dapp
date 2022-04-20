@@ -9,13 +9,14 @@ import {
   Group,
 } from '@mantine/core';
 import {
-  Home as HomeIcon,
+  // Home as HomeIcon,
   Diamond as MintIcon,
   LayoutGrid as NounsIcon,
 } from 'tabler-icons-react';
 import AppContext from '../context/AppContext';
 import useIsDesktop from '../hooks/useIsDesktop';
 import ConnectBtn from './ConnectBtn';
+import Disclaimer from './Disclaimer';
 
 const Navbar = () => {
   const { navbarVisible, toggleNavbar } = useContext(AppContext);
@@ -31,7 +32,7 @@ const Navbar = () => {
     >
       <Stack justify='flex-start'>
         {!isDesktop && <ConnectBtn />}
-        <Button
+        {/* <Button
           onClick={toggleNavbar}
           component={Link}
           to='/'
@@ -44,6 +45,15 @@ const Navbar = () => {
           onClick={toggleNavbar}
           component={Link}
           to='/mint'
+          leftIcon={<MintIcon />}
+          variant='outline'
+        >
+          Mint
+        </Button> */}
+        <Button
+          onClick={toggleNavbar}
+          component={Link}
+          to='/'
           leftIcon={<MintIcon />}
           variant='outline'
         >
@@ -65,9 +75,7 @@ const Navbar = () => {
           FGCU
         </Anchor>
 
-        <Anchor color='indigo' component={Link} to='/disclaimer'>
-          Disclaimer
-        </Anchor>
+        <Disclaimer />
       </Group>
     </MantineNavbar>
   );
