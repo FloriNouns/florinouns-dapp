@@ -15,9 +15,9 @@ const FAQ = () => {
         </Accordion.Item>
 
         <Accordion.Item label='How does the minting work?'>
-          When you mint an Florinoun, you'll get the next currently available
+          When you mint an FloriNoun, you'll get the next currently available
           one. This means if someone mints the current one before you, you'll
-          get the one after that! The "Other Possible Florinouns" row gives you
+          get the one after that! The "Other Possible FloriNouns" row gives you
           an idea of what you might get.
         </Accordion.Item>
 
@@ -28,7 +28,7 @@ const FAQ = () => {
         </Accordion.Item>
 
         <Accordion.Item label='Where are the images stored?'>
-          The images are stored using IPFS. After minting a Florinoun, you'll be
+          The images are stored using IPFS. After minting a FloriNoun, you'll be
           shown links to either OpenSea or Rarible where you can view the NFT.
         </Accordion.Item>
 

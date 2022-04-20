@@ -1,8 +1,8 @@
-# Florinoun Dapp
+# FloriNouns Dapp
 
 ## About The Project
 
-This project is affiliated with [FGCU](https://www.fgcu.edu/) and will allow users to mint NFTs from the Florinoun NFT collection.
+This project is affiliated with [FGCU](https://www.fgcu.edu/) and will allow users to mint NFTs from the FloriNouns NFT collection.
 
 ### Built and Deployed With
 

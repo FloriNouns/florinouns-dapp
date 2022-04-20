@@ -57,7 +57,7 @@ const Mint = () => {
             weight={400}
             size={'xl'}
           >
-            Other Possible Florinouns
+            Other Possible FloriNouns
           </Text>
           <SimpleGrid
             style={{ height: 'auto' }}

@@ -14,7 +14,7 @@ const Disclaimer = () => {
         title='Disclaimer'
       >
         <Text>
-          All Florinouns purchased through minting via this site or through a
+          All FloriNouns purchased through minting via this site or through a
           third party are under your own discretion. Please review laws and
           taxations surounding cryptocurrency and NFTs in your country before
           purchase.

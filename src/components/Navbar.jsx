@@ -69,7 +69,7 @@ const Navbar = () => {
           Nouns
         </Button>
       </Stack>
-      <Divider mt='xl' mb='xs' label='2022 Florinoun' labelPosition='center' />
+      <Divider mt='xl' mb='xs' label='2022 FloriNouns' labelPosition='center' />
       <Group position='center'>
         <Anchor href='https://www.fgcu.edu/' target='_blank'>
           FGCU

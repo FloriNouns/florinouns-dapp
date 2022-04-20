@@ -116,7 +116,7 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
       return (
         <>
           <Text color='black' weight={400} size={'xl'}>
-            Possible Florinoun - #{nextToken}
+            Possible FloriNoun - #{nextToken}
           </Text>
           {!resultURLs && (
             <>

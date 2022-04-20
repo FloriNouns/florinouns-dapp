@@ -41,7 +41,7 @@ const NounImage = ({ tokenId, base }) => {
                 style={{ height: '15%', marginTop: 'auto' }}
                 loader={
                   <Text color='white' weight={400} size={'lg'}>
-                    Florinoun #{tokenId}
+                    FloriNoun #{tokenId}
                   </Text>
                 }
                 overlayOpacity={0.7}
@@ -53,7 +53,7 @@ const NounImage = ({ tokenId, base }) => {
               <Caption
                 loader={
                   <Text color='white' weight={400} size={'xl'}>
-                    Florinoun #{tokenId}
+                    FloriNoun #{tokenId}
                   </Text>
                 }
                 overlayOpacity={0.7}
@@ -66,9 +66,9 @@ const NounImage = ({ tokenId, base }) => {
         )}
         <Image
           src={
-            base !== ''
-              ? `https://storage.googleapis.com/fln-collection/${tokenId}.png`
-              : `https://storage.googleapis.com/fln-collection/placeholder.png`
+            base === '' || tokenId === 0
+              ? `https://storage.googleapis.com/fln-collection/placeholder.png`
+              : `https://storage.googleapis.com/fln-collection/${tokenId}.png`
           }
         />
       </Skeleton>
