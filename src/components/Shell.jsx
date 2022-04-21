@@ -5,7 +5,7 @@ import Header from './Header';
 import Navbar from './Navbar';
 
 const Shell = () => {
-  // const Home = lazy(() => import('../pages/Home'));
+  const Home = lazy(() => import('../pages/Home'));
   const Mint = lazy(() => import('../pages/Mint'));
   const Nouns = lazy(() => import('../pages/Nouns'));
   // const Noun = lazy(() => import('../pages/Noun'));
@@ -41,9 +41,8 @@ const Shell = () => {
           }
         >
           <Routes>
-            {/* <Route path='/' element={<Home />} /> */}
-            {/* <Route path='/mint' element={<Mint />} /> */}
-            <Route path='/' element={<Mint />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/mint' element={<Mint />} />
             <Route path='/nouns/:page' element={<Nouns />} />
             {/* <Route path='/noun/:tokenId' element={<Noun />} /> */}
             <Route path='*' element={<NotFound />} />
