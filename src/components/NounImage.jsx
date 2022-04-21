@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Skeleton,
   Image,
@@ -34,8 +34,7 @@ const NounImage = ({ tokenId, base }) => {
         style={{ aspectRatio: 1, contain: 'content' }}
       >
         {location.pathname.includes('/nouns/') && (
-          <>
-            {/* <Link to={`/noun/${tokenId}`}> */}
+          <Link to={`/noun/${tokenId}`}>
             {!isDesktop && (
               <Caption
                 style={{ height: '15%', marginTop: 'auto' }}
@@ -61,8 +60,7 @@ const NounImage = ({ tokenId, base }) => {
                 visible={hovered}
               />
             )}
-            {/* </Link> */}
-          </>
+          </Link>
         )}
         <Image
           src={

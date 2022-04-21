@@ -8,7 +8,7 @@ const Shell = () => {
   // const Home = lazy(() => import('../pages/Home'));
   const Mint = lazy(() => import('../pages/Mint'));
   const Nouns = lazy(() => import('../pages/Nouns'));
-  // const Noun = lazy(() => import('../pages/Noun'));
+  const Noun = lazy(() => import('../pages/Noun'));
   const NotFound = lazy(() => import('../pages/NotFound'));
   const theme = useMantineTheme();
 
@@ -45,7 +45,7 @@ const Shell = () => {
             {/* <Route path='/mint' element={<Mint />} /> */}
             <Route path='/' element={<Mint />} />
             <Route path='/nouns/:page' element={<Nouns />} />
-            {/* <Route path='/noun/:tokenId' element={<Noun />} /> */}
+            <Route path='/noun/:tokenId' element={<Noun />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Suspense>
