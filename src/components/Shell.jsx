@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppShell, LoadingOverlay, useMantineTheme } from '@mantine/core';
 import Header from './Header';
 import Navbar from './Navbar';
+import Disclaimer from './Disclaimer';
 
 const Shell = () => {
   // const Home = lazy(() => import('../pages/Home'));
@@ -47,6 +48,7 @@ const Shell = () => {
             <Route path='/nouns/:page' element={<Nouns />} />
             {/* <Route path='/noun/:tokenId' element={<Noun />} /> */}
             <Route path='*' element={<NotFound />} />
+            <Route path='/disclaimer' element={<Disclaimer/>}/>
           </Routes>
         </Suspense>
       </AppShell>

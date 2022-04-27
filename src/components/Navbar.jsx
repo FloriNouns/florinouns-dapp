@@ -12,11 +12,11 @@ import {
   // Home as HomeIcon,
   Diamond as MintIcon,
   LayoutGrid as NounsIcon,
+  AlertCircle as DisclaimerIcon
 } from 'tabler-icons-react';
 import AppContext from '../context/AppContext';
 import useIsDesktop from '../hooks/useIsDesktop';
 import ConnectBtn from './ConnectBtn';
-import Disclaimer from './Disclaimer';
 
 const Navbar = () => {
   const { navbarVisible, toggleNavbar } = useContext(AppContext);
@@ -68,14 +68,23 @@ const Navbar = () => {
         >
           Nouns
         </Button>
+        <Button
+          onClick={toggleNavbar}
+          component={Link}
+          to='/disclaimer'
+          leftIcon={<DisclaimerIcon />}
+          variant='outline'
+        >
+          Disclaimer
+        </Button>
       </Stack>
       <Divider mt='xl' mb='xs' label='2022 FloriNouns' labelPosition='center' />
       <Group position='center'>
         <Anchor href='https://www.fgcu.edu/' target='_blank'>
           FGCU
         </Anchor>
-
-        <Disclaimer />
+        
+        
       </Group>
     </MantineNavbar>
   );
