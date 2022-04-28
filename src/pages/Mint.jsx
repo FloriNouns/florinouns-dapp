@@ -11,7 +11,16 @@
  */
 
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Card, Grid, Text, Skeleton, SimpleGrid, Image } from '@mantine/core';
+import {
+  Card,
+  Grid,
+  Text,
+  Skeleton,
+  SimpleGrid,
+  Image,
+  Anchor,
+} from '@mantine/core';
+import { Link } from 'react-router-dom';
 import Web3Context from '../context/Web3Context';
 import useContract from '../hooks/useContract';
 import NounImage from '../components/NounImage';
@@ -81,17 +90,32 @@ const Mint = () => {
       visible={loading}
     >
       <Card style={{ margin: 'auto', maxWidth: '800px' }} shadow='md' p='lg'>
-        <Grid justify='center'>
-          <NounImage
-            tokenId={next || 0}
-            base={!accountValid() || !base ? '' : base}
-          />
-          <NounMenu
-            updateNext={(n) => setNext(() => n)}
-            accountValid={accountValid}
-            currentAccount={currentAccount}
-          />
-        </Grid>
+        {next > supply && (
+          <>
+            <Text size='xl' weight='700' align='center'>
+              All FloriNouns have been minted!
+            </Text>
+            <Text style={{ marginTop: '5px' }} size='xl' align='center'>
+              View the collection{' '}
+              <Anchor component={Link} to='/nouns/1' size='xl' weight='500'>
+                here
+              </Anchor>
+            </Text>
+          </>
+        )}
+        {next <= supply && (
+          <Grid justify='center'>
+            <NounImage
+              tokenId={next || 0}
+              base={!accountValid() || !base ? '' : base}
+            />
+            <NounMenu
+              updateNext={(n) => setNext(() => n)}
+              accountValid={accountValid}
+              currentAccount={currentAccount}
+            />
+          </Grid>
+        )}
         {currentAccount && renderPossible()}
         <FAQ />
       </Card>
