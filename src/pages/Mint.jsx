@@ -114,8 +114,6 @@ const Mint = () => {
               accountValid={accountValid}
               currentAccount={currentAccount}
             />
-            <Text>{next}</Text>
-            <Text>{supply}</Text>
           </Grid>
         )}
         {currentAccount && renderPossible()}
