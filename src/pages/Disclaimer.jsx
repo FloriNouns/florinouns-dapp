@@ -1,5 +1,5 @@
+import { Divider, Paper, Text } from '@mantine/core';
 import React from 'react';
-import { Paper, Divider, Text } from '@mantine/core';
 
 const Disclaimer = () => {
   return (
@@ -9,11 +9,11 @@ const Disclaimer = () => {
       </Text>
       <Divider size='md' m='sm' />
       <Text size='lg'>
-        All FloriNouns purchased through minting via this site or through a
-        third party are under your own discretion. Please review laws and
+        The decision to mint or purchase FloriNouns via this site or through a
+        third party is under your own discretion. Please review laws and
         taxations surounding cryptocurrency and NFTs in your country before
-        purchase. We are not liable for any legalities that comes from using our
-        website.
+        purchasing. FloriNouns and FGCU are not liable for any legal or
+        financial issues that result from participating.
       </Text>
     </Paper>
   );

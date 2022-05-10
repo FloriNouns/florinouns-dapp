@@ -1,19 +1,8 @@
+import { Anchor, Button, Divider, Group, Navbar as MantineNavbar, Stack } from '@mantine/core';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Navbar as MantineNavbar,
-  Stack,
-  Button,
-  Divider,
-  Anchor,
-  Group,
-} from '@mantine/core';
-import {
-  // Home as HomeIcon,
-  Diamond as MintIcon,
-  LayoutGrid as NounsIcon,
-  AlertCircle as DisclaimerIcon
-} from 'tabler-icons-react';
+import { AlertCircle as DisclaimerIcon, Diamond as MintIcon, LayoutGrid as NounsIcon } from 'tabler-icons-react';
+
 import AppContext from '../context/AppContext';
 import useIsDesktop from '../hooks/useIsDesktop';
 import ConnectBtn from './ConnectBtn';
@@ -78,13 +67,38 @@ const Navbar = () => {
           Disclaimer
         </Button>
       </Stack>
-      <Divider mt='xl' mb='xs' label='2022 FloriNouns' labelPosition='center' />
+      <Divider my='xl' label='2022 FloriNouns' labelPosition='center' />
       <Group position='center'>
         <Anchor href='https://www.fgcu.edu/' target='_blank'>
           FGCU
         </Anchor>
-        
-        
+        <Anchor href='https://opensea.io/collection/florinouns' target='_blank'>
+          OpenSea
+        </Anchor>
+        <Anchor
+          href={`https://rarible.com/collection/${process.env.REACT_APP_CONTRACT_ADDRESS}/items`}
+          target='_blank'
+        >
+          Rarible
+        </Anchor>
+        <Anchor
+          href={`https://etherscan.io/address/0xaCd530bDc049E269dcd743D6E849092c983E7799/${process.env.REACT_APP_CONTRACT_ADDRESS}`}
+          target='_blank'
+        >
+          Etherscan
+        </Anchor>
+        <Anchor href='https://twitter.com/FloriNouns' target='_blank'>
+          Twitter
+        </Anchor>
+        <Anchor href='#' target='_blank'>
+          Instagram
+        </Anchor>
+        <Anchor href='#' target='_blank'>
+          Discord
+        </Anchor>
+        <Anchor href='https://github.com/FloriNouns' target='_blank'>
+          Github
+        </Anchor>
       </Group>
     </MantineNavbar>
   );
