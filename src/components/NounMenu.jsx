@@ -6,11 +6,11 @@
  *		Get metadata from props
  *    Mint button, open sea link, etc.
  */
-
-import React, { useState, useEffect } from 'react';
+import { Button, Grid, SegmentedControl, Text } from '@mantine/core';
 import PropTypes from 'prop-types';
-import { SegmentedControl, Grid, Text, Button } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
+
 import useContract from '../hooks/useContract';
 
 const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
@@ -57,7 +57,7 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
           )
         ) {
           data.push({
-            label: `Invite: ${invite.key}`,
+            label: `Presale Invite`,
             value: invite.key,
           });
         } else {
@@ -78,7 +78,7 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
           color='black'
           size={'sm'}
         >
-          Select your invite below
+          Mint your FloriNoun!
         </Text>
         <SegmentedControl
           value={selectedKey}

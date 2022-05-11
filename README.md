@@ -1,3 +1,11 @@
+<div align="center">
+  <p align="center">
+    <img src="./public/apple-touch-icon.png" width=150>
+    <br/>
+    <a href="https://florinouns-dapp.vercel.app/" target="blank"><img src="./src/assets/img/logo.png" width="350" alt="FloriNouns Logo" /></a>
+  </p>
+</div>
+
 # FloriNouns Dapp
 
 ## About The Project

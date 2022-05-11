@@ -9,29 +9,23 @@
  *    - NounMenu
  *    - (optional) FAQ
  */
-
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import {
-  Card,
-  Grid,
-  Text,
-  Skeleton,
-  SimpleGrid,
-  Image,
-  Anchor,
-} from '@mantine/core';
+import { Anchor, Card, Grid, Image, SimpleGrid, Skeleton, Text } from '@mantine/core';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Web3Context from '../context/Web3Context';
-import useContract from '../hooks/useContract';
+
+import FAQ from '../components/FAQ';
 import NounImage from '../components/NounImage';
 import NounMenu from '../components/NounMenu';
-import FAQ from '../components/FAQ';
+import Web3Context from '../context/Web3Context';
+import useContract from '../hooks/useContract';
+
 
 const Mint = () => {
   const { currentAccount, loading } = useContext(Web3Context);
   const [next, setNext] = useState(null);
   const { supply, base, getConfig } = useContract();
 
+  // Check if account and network type are valid
   const accountValid = useCallback(() => {
     return (
       currentAccount &&
@@ -44,6 +38,7 @@ const Mint = () => {
     if (currentAccount) getConfig();
   }, [getConfig, currentAccount]);
 
+  // Renders other possible florinouns (4 after next token)
   const renderPossible = () => {
     if (!base || !next) return;
     const others = [];
@@ -100,6 +95,27 @@ const Mint = () => {
               <Anchor component={Link} to='/nouns/1' size='xl' weight='500'>
                 here
               </Anchor>
+            </Text>
+            <Text style={{ marginTop: '5px' }} size='lg' align='center'>
+              Follow us on{' '}
+              <Anchor
+                href='https://twitter.com/FloriNouns'
+                target='_blank'
+                size='lg'
+                weight='500'
+              >
+                Twitter
+              </Anchor>{' '}
+              or{' '}
+              <Anchor
+                href='https://instagram.com/FloriNouns'
+                target='_blank'
+                size='lg'
+                weight='500'
+              >
+                Instagram
+              </Anchor>{' '}
+              to find out about future drops!
             </Text>
           </>
         )}
