@@ -1,6 +1,6 @@
 <div align="center">
   <p align="center">
-    <img style="object-fit: cover; object-position: 100% 0;" src="./public/apple-touch-icon.png" width=250 height=165>
+    <img src="./public/apple-touch-icon.png" width=150>
     <br/>
     <a href="https://florinouns-dapp.vercel.app/" target="blank"><img src="./src/assets/img/logo.png" width="350" alt="FloriNouns Logo" /></a>
   </p>
