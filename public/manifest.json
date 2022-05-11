@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "FloriNouns",
+  "name": "Mint site for the FloriNouns NFT collection",
   "icons": [
     {
       "src": "favicon.ico",

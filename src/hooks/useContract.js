@@ -1,10 +1,11 @@
-import { useState, useContext, useCallback, useMemo } from 'react';
 import { showNotification } from '@mantine/notifications';
-import Web3 from 'web3';
-import ipfsh from 'ipfsh';
 import Invitelist from 'invitelist';
-import Web3Context from '../context/Web3Context';
+import ipfsh from 'ipfsh';
+import { useCallback, useContext, useMemo, useState } from 'react';
+import Web3 from 'web3';
+
 import F0 from '../abi/F0.json';
+import Web3Context from '../context/Web3Context';
 
 const useContract = () => {
   const { currentAccount, setLoading } = useContext(Web3Context);
@@ -27,10 +28,13 @@ const useContract = () => {
       provider = window.ethereum;
     } else {
       // else if contract on mainnet, use infura mainnet
-      if (process.env.REACT_APP_CHAIN_ID === 1)
+      if (parseInt(process.env.REACT_APP_CHAIN_ID) === 1) {
         provider = process.env.REACT_APP_MAINNET_JSONRPC;
+      }
       // else use infura rinkeby
-      provider = process.env.REACT_APP_RINKEBY_JSONRPC;
+      else {
+        provider = process.env.REACT_APP_RINKEBY_JSONRPC;
+      }
     }
 
     return provider;
