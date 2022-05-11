@@ -1,5 +1,5 @@
+import { Accordion, Divider, Text } from '@mantine/core';
 import React from 'react';
-import { Accordion, Text, Divider } from '@mantine/core';
 
 const FAQ = () => {
   return (
@@ -24,7 +24,7 @@ const FAQ = () => {
         <Accordion.Item label="Why don't I have any invites?">
           There's multiple phases of availability for the collection. If you
           don't have an invite now, you may after a certain date when another
-          phase begins. The public release begins on May 13th, 2022.
+          phase begins. The public release begins on May 12th, 2022.
         </Accordion.Item>
 
         <Accordion.Item label='Where are the images stored?'>
