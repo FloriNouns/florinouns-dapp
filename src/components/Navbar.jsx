@@ -1,7 +1,18 @@
-import { Anchor, Button, Divider, Group, Navbar as MantineNavbar, Stack } from '@mantine/core';
+import {
+  Anchor,
+  Button,
+  Divider,
+  Group,
+  Navbar as MantineNavbar,
+  Stack,
+} from '@mantine/core';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle as DisclaimerIcon, Diamond as MintIcon, LayoutGrid as NounsIcon } from 'tabler-icons-react';
+import {
+  AlertCircle as DisclaimerIcon,
+  Diamond as MintIcon,
+  LayoutGrid as NounsIcon,
+} from 'tabler-icons-react';
 
 import AppContext from '../context/AppContext';
 import useIsDesktop from '../hooks/useIsDesktop';
@@ -69,9 +80,6 @@ const Navbar = () => {
       </Stack>
       <Divider my='xl' label='2022 FloriNouns' labelPosition='center' />
       <Group position='center'>
-        <Anchor href='https://www.fgcu.edu/' target='_blank'>
-          FGCU
-        </Anchor>
         <Anchor href='https://opensea.io/collection/florinouns' target='_blank'>
           OpenSea
         </Anchor>
@@ -90,14 +98,14 @@ const Navbar = () => {
         <Anchor href='https://twitter.com/FloriNouns' target='_blank'>
           Twitter
         </Anchor>
-        <Anchor href='#' target='_blank'>
+        <Anchor href='https://instagram.com/FloriNouns' target='_blank'>
           Instagram
-        </Anchor>
-        <Anchor href='#' target='_blank'>
-          Discord
         </Anchor>
         <Anchor href='https://github.com/FloriNouns' target='_blank'>
           Github
+        </Anchor>
+        <Anchor href='https://www.fgcu.edu/' target='_blank'>
+          FGCU
         </Anchor>
       </Group>
     </MantineNavbar>

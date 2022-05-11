@@ -12,8 +12,8 @@ const Disclaimer = () => {
         The decision to mint or purchase FloriNouns via this site or through a
         third party is under your own discretion. Please review laws and
         taxations surounding cryptocurrency and NFTs in your country before
-        purchasing. FloriNouns and FGCU are not liable for any legal or
-        financial issues that result from participating.
+        purchasing. FloriNouns and the Dunk City DAO are not liable for any
+        legal or financial issues that result from participating.
       </Text>
     </Paper>
   );

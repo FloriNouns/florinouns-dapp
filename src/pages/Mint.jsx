@@ -32,6 +32,7 @@ const Mint = () => {
   const [next, setNext] = useState(null);
   const { supply, base, getConfig } = useContract();
 
+  // Check if account and network type are valid
   const accountValid = useCallback(() => {
     return (
       currentAccount &&
@@ -44,6 +45,7 @@ const Mint = () => {
     if (currentAccount) getConfig();
   }, [getConfig, currentAccount]);
 
+  // Renders other possible florinouns (4 after next token)
   const renderPossible = () => {
     if (!base || !next) return;
     const others = [];
