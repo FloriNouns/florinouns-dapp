@@ -157,19 +157,26 @@ const useContract = () => {
 
         try {
           if (!checkedKeys.includes(invite.key)) {
-            await contract.methods
-              .mint(
-                {
-                  key: invite.key,
-                  proof: invite.proof,
-                },
-                1
-              )
-              .estimateGas({
-                from: currentAccount,
-                value: '' + invite.condition.price,
-              });
-            invites.push(invite);
+            if (
+              invite.key ===
+              '0x0000000000000000000000000000000000000000000000000000000000000000'
+            ) {
+              invites.push(invite);
+            } else {
+              await contract.methods
+                .mint(
+                  {
+                    key: invite.key,
+                    proof: invite.proof,
+                  },
+                  1
+                )
+                .estimateGas({
+                  from: currentAccount,
+                  value: '' + invite.condition.price,
+                });
+              invites.push(invite);
+            }
           }
         } catch (e) {
           console.log(`Conditions not met for invite ${invite.key}`);
@@ -208,6 +215,7 @@ const useContract = () => {
         });
         return;
       }
+
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(
         F0,
@@ -218,6 +226,21 @@ const useContract = () => {
 
       try {
         let auth = { key: invite.key, proof: invite.proof };
+
+        try {
+          await contract.methods.mint(auth, 1).estimateGas({
+            from: currentAccount,
+            value: '' + invite.condition.price,
+          });
+        } catch (e) {
+          setLoading(false);
+          showNotification({
+            id: 'insufficient-funds',
+            title: 'The transaction exceeds the funds in your wallet',
+          });
+          return;
+        }
+
         let tx = await contract.methods.mint(auth, 1).send({
           from: currentAccount,
           value: '' + invite.condition.price,
