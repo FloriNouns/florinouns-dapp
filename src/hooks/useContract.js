@@ -28,7 +28,7 @@ const useContract = () => {
       provider = window.ethereum;
     } else {
       // else if contract on mainnet, use infura mainnet
-      if (parseInt(process.env.REACT_APP_CHAIN_ID) === 1) {
+      if (process.env.REACT_APP_CHAIN_ID === '1') {
         provider = process.env.REACT_APP_MAINNET_JSONRPC;
       }
       // else use infura rinkeby

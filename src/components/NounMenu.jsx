@@ -102,7 +102,7 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
         return (
           <Text color='black' weight={400} size={'xl'}>
             Please switch your network to{' '}
-            {process.env.REACT_APP_CHAIN_ID === 1 ? 'Mainnet' : 'Rinkeby'}
+            {process.env.REACT_APP_CHAIN_ID === '1' ? 'Mainnet' : 'Rinkeby'}
           </Text>
         );
       else {
