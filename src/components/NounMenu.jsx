@@ -6,7 +6,7 @@
  *		Get metadata from props
  *    Mint button, open sea link, etc.
  */
-import { Button, Grid, SegmentedControl, Text } from '@mantine/core';
+import { Button, Grid, Text } from '@mantine/core';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
@@ -16,7 +16,6 @@ import useContract from '../hooks/useContract';
 const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
   const { nextToken, getNextToken, invites, getInvites, sendMintRequest } =
     useContract();
-  const [selectedKey, setSelectedKey] = useState('');
   const [selectedInvite, setSelectedInvite] = useState(null);
   const [resultURLs, setResultURLs] = useState(null);
   const web3 = new Web3();
@@ -35,61 +34,20 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
   }, [nextToken, updateNext]);
 
   useEffect(() => {
-    if (!selectedKey) return;
-    setSelectedInvite(
-      () => invites.filter((invite) => invite.key === selectedKey)[0]
-    );
-  }, [invites, selectedKey]);
+    if (!invites[0]) return;
 
-  const renderInvites = () => {
-    if (invites.length === 0) return;
-    const data = [];
-
-    for (const invite of invites) {
-      if (data.length === 0 && selectedKey === '')
-        setSelectedKey(() => invite.key);
-
-      if (data.filter((option) => option.value === invite.key).length === 0) {
-        if (
-          !(
-            invite.key ===
-            '0x0000000000000000000000000000000000000000000000000000000000000000'
-          )
-        ) {
-          data.push({
-            label: `Presale Invite`,
-            value: invite.key,
-          });
-        } else {
-          data.push({
-            label: 'Public Release',
-            value: invite.key,
-          });
-        }
-      }
+    if (!selectedInvite) {
+      setSelectedInvite(() => invites[0]);
     }
 
-    return data.length === 0 ? (
-      <></>
-    ) : (
-      <>
-        <Text
-          style={{ marginTop: '30px', marginBottom: '5px' }}
-          color='black'
-          size={'sm'}
-        >
-          Mint your FloriNoun!
-        </Text>
-        <SegmentedControl
-          value={selectedKey}
-          onChange={setSelectedKey}
-          data={data}
-          fullWidth
-          orientation='vertical'
-        />
-      </>
-    );
-  };
+    let lowestPrice = invites[0].condition.price;
+    for (const invite of invites) {
+      if (invite.condition.price < lowestPrice) {
+        setSelectedInvite(() => invite);
+        lowestPrice = invite.condition.price;
+      }
+    }
+  }, [invites, selectedInvite]);
 
   const mint = async () => {
     const results = await sendMintRequest(selectedInvite);
@@ -119,23 +77,20 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
             Possible FloriNoun - #{nextToken}
           </Text>
           {!resultURLs && (
-            <>
-              {renderInvites()}
-              <Button
-                onClick={() => mint(selectedInvite)}
-                style={{ marginTop: '20px' }}
-                size='md'
-                fullWidth
-                disabled={!selectedInvite}
-              >
-                {selectedInvite
-                  ? `Mint for ${web3.utils.fromWei(
-                      selectedInvite.condition.price,
-                      'ether'
-                    )} ETH`
-                  : 'No invite to mint :('}
-              </Button>
-            </>
+            <Button
+              onClick={() => mint(selectedInvite)}
+              style={{ marginTop: '20px' }}
+              size='md'
+              fullWidth
+              disabled={!selectedInvite}
+            >
+              {selectedInvite
+                ? `Mint for ${web3.utils.fromWei(
+                    selectedInvite.condition.price,
+                    'ether'
+                  )} ETH`
+                : 'Mint for 0.025 ETH'}
+            </Button>
           )}
           {resultURLs && resultURLs.length > 0 && (
             <>

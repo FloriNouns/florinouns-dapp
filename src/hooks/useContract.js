@@ -163,19 +163,21 @@ const useContract = () => {
         }
 
         try {
-          await contract.methods
-            .mint(
-              {
-                key: invite.key,
-                proof: invite.proof,
-              },
-              1
-            )
-            .estimateGas({
-              from: currentAccount,
-              value: '' + invite.condition.price,
-            });
-          invites.push(invite);
+          if (invites.filter((i) => i.key === invite.key).length === 0) {
+            await contract.methods
+              .mint(
+                {
+                  key: invite.key,
+                  proof: invite.proof,
+                },
+                1
+              )
+              .estimateGas({
+                from: currentAccount,
+                value: '' + invite.condition.price,
+              });
+            invites.push(invite);
+          }
         } catch (e) {
           console.log(`Conditions not met for invite ${invite.key}`);
         }
