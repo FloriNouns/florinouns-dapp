@@ -64,7 +64,7 @@ const useContract = () => {
       showNotification({
         id: 'connection-failed',
         title: 'Something went wrong...',
-        message: "We couldn't connect to the contract :(",
+        message: 'Please try refreshing the page',
         color: 'red',
       });
     }
@@ -92,7 +92,7 @@ const useContract = () => {
       showNotification({
         id: 'connection-failed',
         title: 'Something went wrong...',
-        message: "We couldn't connect to the contract :(",
+        message: 'Please try refreshing the page',
         color: 'red',
       });
     }
@@ -188,7 +188,7 @@ const useContract = () => {
       showNotification({
         id: 'connection-failed',
         title: 'Something went wrong...',
-        message: "We couldn't connect to the contract :(",
+        message: 'Please try refreshing the page',
         color: 'red',
       });
     }
@@ -203,8 +203,7 @@ const useContract = () => {
         showNotification({
           id: 'connection-failed',
           title: 'Something went wrong...',
-          message:
-            "We couldn't complete the transaction :( Please try refreshing the page",
+          message: 'Please try refreshing the page',
           color: 'red',
         });
         return;
