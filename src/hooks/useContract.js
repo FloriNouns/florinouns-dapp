@@ -20,13 +20,21 @@ const useContract = () => {
     // Declare provider
     let provider;
 
-    // if contract on mainnet, use infura mainnet
-    if (process.env.REACT_APP_CHAIN_ID === '1') {
-      provider = process.env.REACT_APP_MAINNET_JSONRPC;
-    }
-    // else use infura rinkeby
-    else {
-      provider = process.env.REACT_APP_RINKEBY_JSONRPC;
+    // If user is on correct chain, use MetaMask as provider
+    if (
+      window.ethereum &&
+      window.ethereum.networkVersion === process.env.REACT_APP_CHAIN_ID
+    ) {
+      provider = window.ethereum;
+    } else {
+      // else if contract on mainnet, use infura mainnet
+      if (process.env.REACT_APP_CHAIN_ID === '1') {
+        provider = process.env.REACT_APP_MAINNET_JSONRPC;
+      }
+      // else use infura rinkeby
+      else {
+        provider = process.env.REACT_APP_RINKEBY_JSONRPC;
+      }
     }
 
     return provider;
@@ -156,7 +164,11 @@ const useContract = () => {
         }
 
         try {
-          if (!checkedKeys.includes(invite.key)) {
+          if (
+            !checkedKeys.includes(invite.key) &&
+            invite.invited &&
+            invite.condition.start < Date.now()
+          ) {
             if (
               invite.key ===
               '0x0000000000000000000000000000000000000000000000000000000000000000'
@@ -237,6 +249,7 @@ const useContract = () => {
           showNotification({
             id: 'insufficient-funds',
             title: 'The transaction exceeds the funds in your wallet',
+            message: 'The estimate includes gas...',
           });
           return;
         }
