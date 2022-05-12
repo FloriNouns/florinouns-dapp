@@ -131,6 +131,7 @@ const useContract = () => {
 
       // declare array of invites
       let invites = [];
+      let checkedKeys = [];
 
       // for each list
       for (let log of logs) {
@@ -163,7 +164,7 @@ const useContract = () => {
         }
 
         try {
-          if (invites.filter((i) => i.key === invite.key).length === 0) {
+          if (!checkedKeys.includes(invite.key)) {
             await contract.methods
               .mint(
                 {
@@ -180,6 +181,10 @@ const useContract = () => {
           }
         } catch (e) {
           console.log(`Conditions not met for invite ${invite.key}`);
+        }
+
+        if (!checkedKeys.includes(invite.key)) {
+          checkedKeys.push(invite.key);
         }
       }
 
