@@ -9,48 +9,43 @@
 import { Button, Grid, Text } from '@mantine/core';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
 
 import useContract from '../hooks/useContract';
 
 const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
-  const { nextToken, getNextToken, invites, getInvites, sendMintRequest } =
-    useContract();
-  const [selectedInvite, setSelectedInvite] = useState(null);
+  const { nextToken, getNextToken, sendMintRequest } = useContract();
   const [resultURLs, setResultURLs] = useState(null);
-  const web3 = new Web3();
 
   // On mount, get nextToken and invites from contract
   useEffect(() => {
-    if (getNextToken && getInvites && accountValid()) {
+    if (getNextToken && accountValid()) {
       getNextToken();
-      getInvites();
     }
-  }, [getNextToken, getInvites, accountValid]);
+  }, [getNextToken, accountValid]);
 
   // When next token changes, update parent
   useEffect(() => {
     if (nextToken) updateNext(Number(nextToken));
   }, [nextToken, updateNext]);
 
-  useEffect(() => {
-    if (!invites[0]) return;
+  // useEffect(() => {
+  //   if (!invites[0]) return;
 
-    if (!selectedInvite) {
-      setSelectedInvite(() => invites[0]);
-    }
+  //   if (!selectedInvite) {
+  //     setSelectedInvite(() => invites[0]);
+  //   }
 
-    let lowestPrice = invites[0].condition.price;
-    for (const invite of invites) {
-      if (invite.condition.price < lowestPrice) {
-        setSelectedInvite(() => invite);
-        lowestPrice = invite.condition.price;
-      }
-    }
-  }, [invites, selectedInvite]);
+  //   let lowestPrice = invites[0].condition.price;
+  //   for (const invite of invites) {
+  //     if (invite.condition.price < lowestPrice) {
+  //       setSelectedInvite(() => invite);
+  //       lowestPrice = invite.condition.price;
+  //     }
+  //   }
+  // }, [invites, selectedInvite]);
 
   const mint = async () => {
-    const results = await sendMintRequest(selectedInvite);
+    const results = await sendMintRequest();
     setResultURLs(() => results || null);
   };
 
@@ -78,18 +73,18 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
           </Text>
           {!resultURLs && (
             <Button
-              onClick={() => mint(selectedInvite)}
+              onClick={() => mint()}
               style={{ marginTop: '20px' }}
               size='md'
               fullWidth
-              disabled={!selectedInvite}
             >
-              {selectedInvite
+              {/* {selectedInvite
                 ? `Mint for ${web3.utils.fromWei(
                     selectedInvite.condition.price,
                     'ether'
                   )} ETH`
-                : 'Mint for 0.025 ETH'}
+                : 'Mint for 0.025 ETH'} */}
+              Mint for 0.025 ETH
             </Button>
           )}
           {resultURLs && resultURLs.length > 0 && (
