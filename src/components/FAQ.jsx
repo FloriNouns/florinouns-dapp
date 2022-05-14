@@ -9,19 +9,19 @@ const FAQ = () => {
         FAQ
       </Text>
       <Accordion iconSize={28}>
-        <Accordion.Item label='What are invites?'>
-          Invites change how you mint. Some will allow you to mint at an earlier
-          date or a cheaper price.
-        </Accordion.Item>
-
         <Accordion.Item label='How does the minting work?'>
           When you mint a FloriNoun, you'll get the next currently available
           token. This means if someone mints the current token before you,
-          you'll get the one after that! The "Other Possible FloriNouns" row
-          gives you an idea of what you might get.
+          you'll get the one after that!
         </Accordion.Item>
 
-        <Accordion.Item label="Why don't I have any invites?">
+        <Accordion.Item label='How many FloriNouns can I mint?'>
+          You can mint up to 20 FloriNouns in one transaction. The "What you
+          might mint" section lets you know what FloriNouns you may get
+          depending on how many you're minting at once.
+        </Accordion.Item>
+
+        <Accordion.Item label="Why can't I mint?">
           There's multiple phases of availability for the collection. If you
           don't have an invite now, you may after a certain date when another
           phase begins. The public release begins on May 12th, 2022.

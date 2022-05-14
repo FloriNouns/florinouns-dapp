@@ -6,94 +6,106 @@
  *		Get metadata from props
  *    Mint button, open sea link, etc.
  */
-import { Button, Grid, SegmentedControl, Text } from '@mantine/core';
+import { ActionIcon, Button, Grid, Group, Image, SimpleGrid, Text } from '@mantine/core';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import Web3 from 'web3';
+import { SquareMinus, SquarePlus } from 'tabler-icons-react';
 
 import useContract from '../hooks/useContract';
 
-const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
-  const { nextToken, getNextToken, invites, getInvites, sendMintRequest } =
-    useContract();
-  const [selectedKey, setSelectedKey] = useState('');
-  const [selectedInvite, setSelectedInvite] = useState(null);
-  const [resultURLs, setResultURLs] = useState(null);
-  const web3 = new Web3();
+const NounMenu = ({
+  supply,
+  next,
+  updateNext,
+  accountValid,
+  currentAccount,
+  quantity,
+  updateQuantity,
+  minted,
+  updateMinted,
+}) => {
+  const { nextToken, getNextToken, sendMintRequest } = useContract();
+  const [resultURLs, setResultURLs] = useState([]);
 
   // On mount, get nextToken and invites from contract
   useEffect(() => {
-    if (getNextToken && getInvites && accountValid()) {
+    if (getNextToken && accountValid()) {
       getNextToken();
-      getInvites();
     }
-  }, [getNextToken, getInvites, accountValid]);
+  }, [getNextToken, accountValid]);
 
   // When next token changes, update parent
   useEffect(() => {
     if (nextToken) updateNext(Number(nextToken));
   }, [nextToken, updateNext]);
 
-  useEffect(() => {
-    if (!selectedKey) return;
-    setSelectedInvite(
-      () => invites.filter((invite) => invite.key === selectedKey)[0]
-    );
-  }, [invites, selectedKey]);
+  // useEffect(() => {
+  //   if (!invites[0]) return;
 
-  const renderInvites = () => {
-    if (invites.length === 0) return;
-    const data = [];
+  //   if (!selectedInvite) {
+  //     setSelectedInvite(() => invites[0]);
+  //   }
 
-    for (const invite of invites) {
-      if (data.length === 0 && selectedKey === '')
-        setSelectedKey(() => invite.key);
-
-      if (data.filter((option) => option.value === invite.key).length === 0) {
-        if (
-          !(
-            invite.key ===
-            '0x0000000000000000000000000000000000000000000000000000000000000000'
-          )
-        ) {
-          data.push({
-            label: `Presale Invite`,
-            value: invite.key,
-          });
-        } else {
-          data.push({
-            label: 'Public Release',
-            value: invite.key,
-          });
-        }
-      }
-    }
-
-    return data.length === 0 ? (
-      <></>
-    ) : (
-      <>
-        <Text
-          style={{ marginTop: '30px', marginBottom: '5px' }}
-          color='black'
-          size={'sm'}
-        >
-          Mint your FloriNoun!
-        </Text>
-        <SegmentedControl
-          value={selectedKey}
-          onChange={setSelectedKey}
-          data={data}
-          fullWidth
-          orientation='vertical'
-        />
-      </>
-    );
-  };
+  //   let lowestPrice = invites[0].condition.price;
+  //   for (const invite of invites) {
+  //     if (invite.condition.price < lowestPrice) {
+  //       setSelectedInvite(() => invite);
+  //       lowestPrice = invite.condition.price;
+  //     }
+  //   }
+  // }, [invites, selectedInvite]);
 
   const mint = async () => {
-    const results = await sendMintRequest(selectedInvite);
-    setResultURLs(() => results || null);
+    const results = await sendMintRequest(quantity);
+    setResultURLs(() => results || []);
+    if (results) updateMinted();
+  };
+
+  const renderURLS = () => {
+    const results = [];
+
+    for (const token of resultURLs) {
+      results.push(
+        <div key={token.mintedId}>
+          <Text color='black' weight={400} size={'xl'} mt={20}>
+            FloriNoun #{token.mintedId}
+          </Text>
+          <Image
+            src={`https://storage.googleapis.com/fln-collection/${token.mintedId}.png`}
+          />
+          <Button
+            component='a'
+            target='_blank'
+            rel='noopener noreferrer'
+            href={token.openseaURL}
+            fullWidth
+            my={5}
+          >
+            View on OpenSea
+          </Button>
+          <Button
+            component='a'
+            target='_blank'
+            rel='noopener noreferrer'
+            href={token.raribleURL}
+            fullWidth
+            my={5}
+          >
+            View on Rarible
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <SimpleGrid
+        cols={results.length === 1 ? 1 : 2}
+        spacing='lg'
+        breakpoints={[{ maxWidth: 600, cols: 1, spacing: 'sm' }]}
+      >
+        {results}
+      </SimpleGrid>
+    );
   };
 
   const renderContent = () => {
@@ -102,7 +114,7 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
         return (
           <Text color='black' weight={400} size={'xl'}>
             Please switch your network to{' '}
-            {process.env.REACT_APP_CHAIN_ID === 1 ? 'Mainnet' : 'Rinkeby'}
+            {process.env.REACT_APP_CHAIN_ID === '1' ? 'Mainnet' : 'Rinkeby'}
           </Text>
         );
       else {
@@ -115,65 +127,69 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
     } else {
       return (
         <>
-          <Text color='black' weight={400} size={'xl'}>
-            Possible FloriNoun - #{nextToken}
-          </Text>
-          {!resultURLs && (
+          {resultURLs.length === 0 && (
             <>
-              {renderInvites()}
+              <Text color='black' weight={400} size={'xl'}>
+                Possible FloriNoun - #{nextToken}
+              </Text>
+              <Text
+                color='black'
+                style={{ marginTop: '40px' }}
+                weight={400}
+                size={'lg'}
+              >
+                Quantity
+              </Text>
+              <Group position='center' spacing='sm'>
+                <ActionIcon
+                  size='xl'
+                  onClick={() =>
+                    quantity > 1 ? updateQuantity(quantity - 1) : null
+                  }
+                >
+                  <SquareMinus />
+                </ActionIcon>
+                <Text color='black' weight={700} size={'lg'}>
+                  {quantity}
+                </Text>
+                <ActionIcon
+                  size='xl'
+                  onClick={() =>
+                    quantity < 20 && next + quantity < supply
+                      ? updateQuantity(quantity + 1)
+                      : null
+                  }
+                >
+                  <SquarePlus />
+                </ActionIcon>
+              </Group>
               <Button
-                onClick={() => mint(selectedInvite)}
-                style={{ marginTop: '20px' }}
+                onClick={() => mint()}
+                style={{ marginTop: '30px' }}
                 size='md'
                 fullWidth
-                disabled={!selectedInvite}
               >
-                {selectedInvite
-                  ? `Mint for ${web3.utils.fromWei(
-                      selectedInvite.condition.price,
-                      'ether'
-                    )} ETH`
-                  : 'No invite to mint :('}
+                {/* {selectedInvite
+                ? `Mint for ${web3.utils.fromWei(
+                    selectedInvite.condition.price,
+                    'ether'
+                  )} ETH`
+                : 'Mint for 0.025 ETH'} */}
+                Mint for {(0.025 * quantity).toFixed(3)} ETH
               </Button>
             </>
           )}
-          {resultURLs && resultURLs.length > 0 && (
+          {resultURLs.length > 0 && (
             <>
               <Text
-                style={{ marginTop: '20px' }}
+                style={{ marginBottom: '20px' }}
                 color='green'
                 weight={400}
                 size={'xl'}
               >
                 MINT SUCCESSFUL
               </Text>
-              <Button
-                style={{ marginTop: '20px' }}
-                component='a'
-                target='_blank'
-                rel='noopener noreferrer'
-                href={resultURLs[0]}
-                fullWidth
-              >
-                View on OpenSea
-              </Button>
-              <Button
-                style={{ marginTop: '20px' }}
-                component='a'
-                target='_blank'
-                rel='noopener noreferrer'
-                href={resultURLs[1]}
-                fullWidth
-              >
-                View on Rarible
-              </Button>
-              <Button
-                style={{ marginTop: '20px' }}
-                onClick={() => window.location.reload()}
-                fullWidth
-              >
-                Mint Another
-              </Button>
+              {renderURLS()}
             </>
           )}
         </>
@@ -182,7 +198,12 @@ const NounMenu = ({ updateNext, accountValid, currentAccount }) => {
   };
 
   return (
-    <Grid.Col style={{ textAlign: 'center' }} span={12} md={6} p='md'>
+    <Grid.Col
+      style={{ textAlign: 'center' }}
+      span={12}
+      md={minted ? 12 : 6}
+      p='md'
+    >
       {renderContent()}
     </Grid.Col>
   );
