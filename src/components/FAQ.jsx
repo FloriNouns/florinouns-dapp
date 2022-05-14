@@ -17,8 +17,8 @@ const FAQ = () => {
 
         <Accordion.Item label='How many FloriNouns can I mint?'>
           You can mint up to 20 FloriNouns in one transaction. The "What you
-          might mint" section lets you know what FloriNouns you may get
-          depending on how many you're minting at once.
+          could get" section lets you know what FloriNouns you may get depending
+          on how many you're minting at once.
         </Accordion.Item>
 
         <Accordion.Item label="Why can't I mint?">

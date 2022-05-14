@@ -130,7 +130,7 @@ const NounMenu = ({
           {resultURLs.length === 0 && (
             <>
               <Text color='black' weight={400} size={'xl'}>
-                Possible FloriNoun - #{nextToken}
+                Possible FloriNoun: #{nextToken}
               </Text>
               <Text
                 color='black'
