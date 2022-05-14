@@ -216,89 +216,119 @@ const useContract = () => {
   // }, [nextToken, checkedInvites, currentAccount, setLoading]);
 
   // mint next token (factoria dev docs - minting with private invite)
-  const sendMintRequest = useCallback(async () => {
-    if (!nextToken || !currentAccount) {
-      showNotification({
-        id: 'connection-failed',
-        title: 'Something went wrong...',
-        message: 'Please try refreshing the page',
-        color: 'red',
-      });
-      return;
-    }
-
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(
-      F0,
-      process.env.REACT_APP_CONTRACT_ADDRESS
-    );
-
-    setLoading(true);
-
-    try {
-      let auth = {
-        key: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        proof: [],
-      };
-
-      try {
-        await contract.methods.mint(auth, 1).estimateGas({
-          from: currentAccount,
-          value: '25000000000000000',
-        });
-      } catch (e) {
-        setLoading(false);
-        console.log(e);
-        showNotification({
-          id: 'insufficient-funds',
-          title: 'Insufficient funds or mint limit (25) reached',
-          message: 'The estimate includes gas...',
-        });
-        return;
-      }
-
-      let tx = await contract.methods.mint(auth, 1).send({
-        from: currentAccount,
-        value: '25000000000000000',
-      });
-      let mintedId = tx.events.Transfer.returnValues.tokenId;
-      let openseaURL =
-        process.env.REACT_APP_CHAIN_ID === 1
-          ? 'https://opensea.io'
-          : 'https://testnets.opensea.io';
-      openseaURL += `/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
-      let raribleURL =
-        process.env.REACT_APP_CHAIN_ID === 1
-          ? 'https://rarible.com'
-          : 'https://rinkeby.rarible.com';
-      raribleURL += `/token/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
-
-      setLoading(false);
-      // getInvites();
-      return [openseaURL, raribleURL];
-    } catch (e) {
-      // catch race condition if nextToken was already minted
-      // refreshing page in 5s... or something
-
-      if (e.code === 4001) {
-        showNotification({
-          id: 'mint-reject',
-          title: 'Transaction rejected successfully',
-        });
-      } else {
-        // if there's an error, alert user
-        console.error(e);
+  const sendMintRequest = useCallback(
+    async (quantity) => {
+      if (!nextToken || !currentAccount) {
         showNotification({
           id: 'connection-failed',
           title: 'Something went wrong...',
           message: 'Please try refreshing the page',
           color: 'red',
         });
+        return;
       }
-    }
 
-    setLoading(false);
-  }, [nextToken, currentAccount, setLoading]);
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(
+        F0,
+        process.env.REACT_APP_CONTRACT_ADDRESS
+      );
+
+      setLoading(true);
+
+      try {
+        let auth = {
+          key: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          proof: [],
+        };
+
+        try {
+          await contract.methods.mint(auth, quantity).estimateGas({
+            from: currentAccount,
+            value: Web3.utils.toWei((quantity * 0.025).toFixed(3), 'ether'),
+          });
+        } catch (e) {
+          setLoading(false);
+          console.log(e);
+          showNotification({
+            id: 'insufficient-funds',
+            title: 'Insufficient funds or mint limit reached',
+            message: 'The estimate includes gas...',
+          });
+          return;
+        }
+
+        let tx = await contract.methods.mint(auth, quantity).send({
+          from: currentAccount,
+          value: Web3.utils.toWei((quantity * 0.025).toFixed(3), 'ether'),
+        });
+
+        const output = [];
+        // let mintedId = tx.events.Transfer.returnValues.tokenId;
+
+        if (Array.isArray(tx.events.Transfer)) {
+          for (const transfer of tx.events.Transfer) {
+            let mintedId = transfer.returnValues.tokenId;
+
+            let openseaURL =
+              process.env.REACT_APP_CHAIN_ID === '1'
+                ? 'https://opensea.io'
+                : 'https://testnets.opensea.io';
+            openseaURL += `/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+            let raribleURL =
+              process.env.REACT_APP_CHAIN_ID === '1'
+                ? 'https://rarible.com'
+                : 'https://rinkeby.rarible.com';
+            raribleURL += `/token/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+
+            output.push({ mintedId, openseaURL, raribleURL });
+          }
+        } else {
+          let mintedId = tx.events.Transfer.returnValues.tokenId;
+
+          let openseaURL =
+            process.env.REACT_APP_CHAIN_ID === '1'
+              ? 'https://opensea.io'
+              : 'https://testnets.opensea.io';
+          openseaURL += `/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+          let raribleURL =
+            process.env.REACT_APP_CHAIN_ID === '1'
+              ? 'https://rarible.com'
+              : 'https://rinkeby.rarible.com';
+          raribleURL += `/token/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+
+          setLoading(false);
+          return [{ mintedId, openseaURL, raribleURL }];
+        }
+
+        // getInvites();
+        setLoading(false);
+        return output;
+      } catch (e) {
+        // catch race condition if nextToken was already minted
+        // refreshing page in 5s... or something
+
+        if (e.code === 4001) {
+          showNotification({
+            id: 'mint-reject',
+            title: 'Transaction rejected successfully',
+          });
+        } else {
+          // if there's an error, alert user
+          console.error(e);
+          showNotification({
+            id: 'connection-failed',
+            title: 'Something went wrong...',
+            message: 'Please try refreshing the page',
+            color: 'red',
+          });
+        }
+      }
+
+      setLoading(false);
+    },
+    [nextToken, currentAccount, setLoading]
+  );
 
   // TODO set return for anything we add later
   return useMemo(() => {
