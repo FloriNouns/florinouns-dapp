@@ -70,7 +70,7 @@ const Mint = () => {
             weight={400}
             size={'xl'}
           >
-            What you might mint
+            What you could get...
           </Text>
           <SimpleGrid
             style={{ height: 'auto' }}
