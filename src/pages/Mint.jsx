@@ -19,10 +19,11 @@ import NounMenu from '../components/NounMenu';
 import Web3Context from '../context/Web3Context';
 import useContract from '../hooks/useContract';
 
-
 const Mint = () => {
   const { currentAccount, loading } = useContext(Web3Context);
   const [next, setNext] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [minted, setMinted] = useState(false);
   const { supply, base, getConfig } = useContract();
 
   // Check if account and network type are valid
@@ -38,12 +39,20 @@ const Mint = () => {
     if (currentAccount) getConfig();
   }, [getConfig, currentAccount]);
 
+  const updateQuantity = (q) => {
+    setQuantity(() => q);
+  };
+
+  const updateMinted = () => {
+    setMinted(() => true);
+  };
+
   // Renders other possible florinouns (4 after next token)
   const renderPossible = () => {
     if (!base || !next) return;
     const others = [];
 
-    for (let i = next + 1; i <= next + 4 && i <= supply; i++) {
+    for (let i = next; i < next + quantity && i <= supply; i++) {
       others.push(
         <Image
           key={i}
@@ -61,7 +70,7 @@ const Mint = () => {
             weight={400}
             size={'xl'}
           >
-            Other Possible FloriNouns
+            What you might mint
           </Text>
           <SimpleGrid
             style={{ height: 'auto' }}
@@ -121,18 +130,26 @@ const Mint = () => {
         )}
         {next <= supply && (
           <Grid justify='center'>
-            <NounImage
-              tokenId={next || 0}
-              base={!accountValid() || !base ? '' : base}
-            />
+            {!minted && (
+              <NounImage
+                tokenId={next || 0}
+                base={!accountValid() || !base ? '' : base}
+              />
+            )}
             <NounMenu
+              supply={supply}
+              next={next}
               updateNext={(n) => setNext(() => n)}
               accountValid={accountValid}
               currentAccount={currentAccount}
+              quantity={quantity}
+              updateQuantity={updateQuantity}
+              minted={minted}
+              updateMinted={updateMinted}
             />
           </Grid>
         )}
-        {currentAccount && renderPossible()}
+        {currentAccount && !minted && renderPossible()}
         <FAQ />
       </Card>
     </Skeleton>

@@ -1,6 +1,4 @@
 import { showNotification } from '@mantine/notifications';
-import Invitelist from 'invitelist';
-import ipfsh from 'ipfsh';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import Web3 from 'web3';
 
@@ -12,8 +10,8 @@ const useContract = () => {
   const [supply, setSupply] = useState(null);
   const [base, setBase] = useState(null);
   const [nextToken, setNextToken] = useState(null);
-  const [invites, setInvites] = useState([]);
-  const [checkedInvites, setCheckedInvites] = useState(false);
+  // const [invites, setInvites] = useState([]);
+  // const [checkedInvites, setCheckedInvites] = useState(false);
 
   // gets config from contract (check factoria dev docs)
   const getProvider = useCallback(() => {
@@ -28,7 +26,7 @@ const useContract = () => {
       provider = window.ethereum;
     } else {
       // else if contract on mainnet, use infura mainnet
-      if (parseInt(process.env.REACT_APP_CHAIN_ID) === 1) {
+      if (process.env.REACT_APP_CHAIN_ID === '1') {
         provider = process.env.REACT_APP_MAINNET_JSONRPC;
       }
       // else use infura rinkeby
@@ -72,7 +70,7 @@ const useContract = () => {
       showNotification({
         id: 'connection-failed',
         title: 'Something went wrong...',
-        message: "We couldn't connect to the contract :(",
+        message: 'Please try refreshing the page',
         color: 'red',
       });
     }
@@ -100,7 +98,7 @@ const useContract = () => {
       showNotification({
         id: 'connection-failed',
         title: 'Something went wrong...',
-        message: "We couldn't connect to the contract :(",
+        message: 'Please try refreshing the page',
         color: 'red',
       });
     }
@@ -109,107 +107,127 @@ const useContract = () => {
   }, [currentAccount, setLoading]);
 
   // gets invites from contract (minting with private invite)
-  const getInvites = useCallback(async () => {
-    // if there's no contract or invites already checked, return
-    if (checkedInvites || !nextToken || !currentAccount) return;
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(
-      F0,
-      process.env.REACT_APP_CONTRACT_ADDRESS
-    );
+  // const getInvites = useCallback(async () => {
+  //   // if there's no contract or invites already checked, return
+  //   if (checkedInvites || !nextToken || !currentAccount) return;
+  //   const web3 = new Web3(window.ethereum);
+  //   const contract = new web3.eth.Contract(
+  //     F0,
+  //     process.env.REACT_APP_CONTRACT_ADDRESS
+  //   );
 
-    setLoading(true);
+  //   setLoading(true);
 
-    try {
-      // get invite lists
-      let logs = await contract.getPastEvents('Invited', {
-        fromBlock: 0,
-        toBlock: 'latest',
-      });
+  //   try {
+  //     // get invite lists
+  //     let logs = await contract.getPastEvents('Invited', {
+  //       fromBlock: 0,
+  //       toBlock: 'latest',
+  //     });
 
-      setCheckedInvites(() => true);
+  //     setCheckedInvites(() => true);
 
-      // declare array of invites
-      let invites = [];
+  //     // declare array of invites
+  //     let invites = [];
+  //     let checkedKeys = [];
 
-      // for each list
-      for (let log of logs) {
-        // set key and digested IPFS cid
-        let invite = {
-          key: log.returnValues.key,
-          cid: ipfsh.dtoc(log.returnValues.cid),
-          condition: await contract.methods.invite(log.returnValues.key).call(),
-        };
+  //     // for each list
+  //     for (let log of logs) {
+  //       // set key and digested IPFS cid
+  //       let invite = {
+  //         key: log.returnValues.key,
+  //         cid: ipfsh.dtoc(log.returnValues.cid),
+  //         condition: await contract.methods.invite(log.returnValues.key).call(),
+  //       };
 
-        // if key is 0x00... (public release list)
-        if (
-          invite.key ===
-          '0x0000000000000000000000000000000000000000000000000000000000000000'
-        ) {
-          invite.addresses = [];
-          invite.list = null;
-          invite.proof = [];
-          invite.invited = true;
-        } else {
-          let res = await fetch(
-            'https://cloudflare-ipfs.com/ipfs/' + invite.cid
-          ).then((r) => {
-            return r.json();
-          });
-          invite.addresses = res.addresses;
-          invite.list = new Invitelist(res.addresses);
-          invite.proof = invite.list.proof(currentAccount);
-          invite.invited = invite.list.verify(currentAccount, invite.proof);
-        }
+  //       console.log(invite);
 
-        try {
-          await contract.methods
-            .mint(
-              {
-                key: invite.key,
-                proof: invite.proof,
-              },
-              1
-            )
-            .estimateGas({
-              from: currentAccount,
-              value: '' + invite.condition.price,
-            });
-          invites.push(invite);
-        } catch (e) {
-          console.log(`Conditions not met for invite ${invite.key}`);
-        }
-      }
+  //       // if key is 0x00... (public release list)
+  //       if (
+  //         invite.key ===
+  //         '0x0000000000000000000000000000000000000000000000000000000000000000'
+  //       ) {
+  //         invite.addresses = [];
+  //         invite.list = null;
+  //         invite.proof = [];
+  //         invite.invited = true;
+  //       } else {
+  //         let res = await fetch(
+  //           'https://cloudflare-ipfs.com/ipfs/' + invite.cid
+  //         ).then((r) => {
+  //           return r.json();
+  //         });
+  //         invite.addresses = res.addresses;
+  //         invite.list = new Invitelist(res.addresses);
+  //         invite.proof = invite.list.proof(currentAccount);
+  //         invite.invited = invite.list.verify(currentAccount, invite.proof);
+  //       }
 
-      // set invites in state
-      setInvites(() => invites);
-    } catch (e) {
-      // if there's an error, alert user
-      console.error(e);
-      showNotification({
-        id: 'connection-failed',
-        title: 'Something went wrong...',
-        message: "We couldn't connect to the contract :(",
-        color: 'red',
-      });
-    }
+  //       try {
+  //         if (
+  //           !checkedKeys.includes(invite.key) &&
+  //           invite.invited &&
+  //           invite.condition.start < Date.now()
+  //         ) {
+  //           if (
+  //             invite.key ===
+  //             '0x0000000000000000000000000000000000000000000000000000000000000000'
+  //           ) {
+  //             invites.push(invite);
+  //           } else {
+  //             await contract.methods
+  //               .mint(
+  //                 {
+  //                   key: invite.key,
+  //                   proof: invite.proof,
+  //                 },
+  //                 1
+  //               )
+  //               .estimateGas({
+  //                 from: currentAccount,
+  //                 value: '' + invite.condition.price,
+  //               });
+  //             invites.push(invite);
+  //           }
+  //         }
+  //       } catch (e) {
+  //         console.log(`Conditions not met for invite ${invite.key}`);
+  //       }
 
-    setLoading(false);
-  }, [nextToken, checkedInvites, currentAccount, setLoading]);
+  //       if (!checkedKeys.includes(invite.key)) {
+  //         checkedKeys.push(invite.key);
+  //       }
+  //     }
+
+  //     // set invites in state
+  //     setInvites(() => invites);
+  //   } catch (e) {
+  //     // if there's an error, alert user
+  //     console.error(e);
+  //     showNotification({
+  //       id: 'connection-failed',
+  //       title: 'Something went wrong...',
+  //       message: 'Please try refreshing the page',
+  //       color: 'red',
+  //     });
+  //   }
+
+  //   setLoading(false);
+  // }, [nextToken, checkedInvites, currentAccount, setLoading]);
 
   // mint next token (factoria dev docs - minting with private invite)
   const sendMintRequest = useCallback(
-    async (invite) => {
-      if (invites.length === 0 || !nextToken || !currentAccount) {
+    async (quantity) => {
+      if (!nextToken || !currentAccount) {
         showNotification({
           id: 'connection-failed',
           title: 'Something went wrong...',
-          message:
-            "We couldn't complete the transaction :( Please try refreshing the page",
+          message: 'Please try refreshing the page',
           color: 'red',
         });
         return;
       }
+
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(
         F0,
@@ -219,26 +237,73 @@ const useContract = () => {
       setLoading(true);
 
       try {
-        let auth = { key: invite.key, proof: invite.proof };
-        let tx = await contract.methods.mint(auth, 1).send({
-          from: currentAccount,
-          value: '' + invite.condition.price,
-        });
-        let mintedId = tx.events.Transfer.returnValues.tokenId;
-        let openseaURL =
-          process.env.REACT_APP_CHAIN_ID === 1
-            ? 'https://opensea.io'
-            : 'https://testnets.opensea.io';
-        openseaURL += `/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
-        let raribleURL =
-          process.env.REACT_APP_CHAIN_ID === 1
-            ? 'https://rarible.com'
-            : 'https://rinkeby.rarible.com';
-        raribleURL += `/token/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+        let auth = {
+          key: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          proof: [],
+        };
 
+        try {
+          await contract.methods.mint(auth, quantity).estimateGas({
+            from: currentAccount,
+            value: Web3.utils.toWei((quantity * 0.025).toFixed(3), 'ether'),
+          });
+        } catch (e) {
+          setLoading(false);
+          console.log(e);
+          showNotification({
+            id: 'insufficient-funds',
+            title: 'Insufficient funds or mint limit reached',
+            message: 'The estimate includes gas...',
+          });
+          return;
+        }
+
+        let tx = await contract.methods.mint(auth, quantity).send({
+          from: currentAccount,
+          value: Web3.utils.toWei((quantity * 0.025).toFixed(3), 'ether'),
+        });
+
+        const output = [];
+        // let mintedId = tx.events.Transfer.returnValues.tokenId;
+
+        if (Array.isArray(tx.events.Transfer)) {
+          for (const transfer of tx.events.Transfer) {
+            let mintedId = transfer.returnValues.tokenId;
+
+            let openseaURL =
+              process.env.REACT_APP_CHAIN_ID === '1'
+                ? 'https://opensea.io'
+                : 'https://testnets.opensea.io';
+            openseaURL += `/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+            let raribleURL =
+              process.env.REACT_APP_CHAIN_ID === '1'
+                ? 'https://rarible.com'
+                : 'https://rinkeby.rarible.com';
+            raribleURL += `/token/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+
+            output.push({ mintedId, openseaURL, raribleURL });
+          }
+        } else {
+          let mintedId = tx.events.Transfer.returnValues.tokenId;
+
+          let openseaURL =
+            process.env.REACT_APP_CHAIN_ID === '1'
+              ? 'https://opensea.io'
+              : 'https://testnets.opensea.io';
+          openseaURL += `/assets/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+          let raribleURL =
+            process.env.REACT_APP_CHAIN_ID === '1'
+              ? 'https://rarible.com'
+              : 'https://rinkeby.rarible.com';
+          raribleURL += `/token/${process.env.REACT_APP_CONTRACT_ADDRESS}/${mintedId}`;
+
+          setLoading(false);
+          return [{ mintedId, openseaURL, raribleURL }];
+        }
+
+        // getInvites();
         setLoading(false);
-        getInvites();
-        return [openseaURL, raribleURL];
+        return output;
       } catch (e) {
         // catch race condition if nextToken was already minted
         // refreshing page in 5s... or something
@@ -262,7 +327,7 @@ const useContract = () => {
 
       setLoading(false);
     },
-    [invites, nextToken, getInvites, currentAccount, setLoading]
+    [nextToken, currentAccount, setLoading]
   );
 
   // TODO set return for anything we add later
@@ -273,20 +338,9 @@ const useContract = () => {
       getConfig,
       nextToken,
       getNextToken,
-      invites,
-      getInvites,
       sendMintRequest,
     };
-  }, [
-    supply,
-    base,
-    getConfig,
-    nextToken,
-    getNextToken,
-    invites,
-    getInvites,
-    sendMintRequest,
-  ]);
+  }, [supply, base, getConfig, nextToken, getNextToken, sendMintRequest]);
 };
 
 export default useContract;
